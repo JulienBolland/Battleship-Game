@@ -65,7 +65,7 @@ class HttpHandler{
     Date date = new Date();
     headers.add(new String[] {"Date", "Blank"});
     headers.add(new String[] {"Connection", "close"});
-    headers.add(new String[] {"Content-Type", "text/html"});
+    headers.add(new String[] {"Content-Type", "text/html; charset=utf-8"});
 
     state = true;
   }
