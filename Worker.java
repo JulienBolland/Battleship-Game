@@ -111,9 +111,9 @@ public class Worker extends Thread{
 
             //Construction of the response
             cookie.getValue();
-            httpresponse.printHeader("Set-Cookie", /*cookie.getValue()+ */"; path=/");
-            if(httpreq.getHeader("Accept-Encoding") != null && httpreq.getHeader("Accept-Encoding").contains("gzip"))
-              httpresponse.printHeader("Content-Encoding", "gzip");
+            httpresponse.printHeader("Set-Cookie", cookie.getValue() + "; path=/");
+          //  if(httpreq.getHeader("Accept-Encoding") != null && httpreq.getHeader("Accept-Encoding").contains("gzip"))
+            //  httpresponse.printHeader("Content-Encoding", "gzip");
             httpresponse.printBody(htmlGenerator.generateHtml("GET", currentGame));
             emitter.send(httpresponse);
           }

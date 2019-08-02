@@ -64,11 +64,11 @@ class BattleshipHTML{
   private String getImage(int j, int i, Game game){
     return "image.png";
   }
-  
+
   private String generateScript(String method){
     BattleshipImages tempo = new BattleshipImages();
     if(method.equals("GET")){
-      String temp = "<script>\n var plouf =\"" + tempo.getImage("plouf")+ "\"; var boom =\"" + tempo.getImage("boom") + "\"; var water =\"" + tempo.getImage("water")+ "\";" + getFile("actions.js") + "\n</script>\n";
+      String temp = "<script>\n var plouf =\"" + tempo.getImage("plouf")+ "\"; var boom =\"" + tempo.getImage("boom") + "\"; var water =\"" + tempo.getImage("water")+ "\";\n\n\n" + getFile("actions.js") + "\n</script>\n";
       temp = temp.concat("<noscript><form action=\"play.html\" method=\"POST\"> <center>Column:<select name=\"x\">");
       int i;
       for(i = 0; i < 10; i++)
