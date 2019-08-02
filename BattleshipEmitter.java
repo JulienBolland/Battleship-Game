@@ -26,9 +26,7 @@ class BattleshipEmitter{
   //encoding (gzip compression if enabled has already been done)
   public void send(HttpHandler request){
     try{
-      System.out.println("Hey");
       OutputStream serverOut = sock.getOutputStream();
-      System.out.println("Ho");
       byte[][] msg = request.getHttp();
       // We retrieve the type of charset used
       String charset = "";
@@ -38,9 +36,9 @@ class BattleshipEmitter{
         charset += s.charAt(i);
       }
       // Writing the headers
-      serverOut.write(msg[0], 0, msg.length);
+      serverOut.write(msg[0]);
       // Writing the body with chuncked encoding
-      //serverOut.write(msg[1]);
+      serverOut.write(msg[1]);
       // Flushing
       serverOut.flush();
       serverOut.close();
