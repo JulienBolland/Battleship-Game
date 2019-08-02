@@ -194,6 +194,7 @@ public class Worker extends Thread{
             if(httpreq.getHeader("Accept-Encoding") != null && httpreq.getHeader("Accept-Encoding").contains("gzip"))
               httpresponse.printHeader("Content-Encoding", "gzip");
             httpresponse.printHeader("Content-Type", "text/html; charset=utf-8");
+            httpresponse.printHeader("Set-Cookie", cookie.getValue() + "; path=/");
             httpresponse.printBody(htmlGenerator.generateHtml("POST", currentGame));
             emitter.send(httpresponse);
           }
