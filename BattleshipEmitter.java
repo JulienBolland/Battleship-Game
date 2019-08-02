@@ -23,7 +23,6 @@ class BattleshipEmitter{
   //This methods sends the response in the OutputStream in chuncked
   //encoding (gzip compression if enabled has already been done)
   public void send(HttpHandler request){
-    request.displayHttp();
     try{
       byte[][] msg = request.getHttp();
       // We retrieve the type of charset used
@@ -37,11 +36,8 @@ class BattleshipEmitter{
       serverOut.write(msg[0]);
       // Writing the body with chuncked encoding
       serverOut.write(msg[1]);
-      System.out.println("\n\n\nHey\n\n");
       // Flushing
       serverOut.flush();
-      System.out.println("Réponse:");
-      request.displayHttp();
     }
     catch(IOException e){
       System.out.println(e.getMessage());
