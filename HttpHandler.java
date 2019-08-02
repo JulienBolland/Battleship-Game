@@ -101,8 +101,12 @@ class HttpHandler{
 
       //-----------Then we extract the headers line--------------------
       int i;
-      for(i = 1; i < split_request.length; i++)
-        printHeader(split_request[i].split(":")[0], split_request[i].split(": ")[1]);
+      for(i = 1; i < split_request.length; i++){
+        String temp = "";
+        if(split_request[i].split(": ").length > 1)
+          temp = split_request[i].split(": ")[1];
+        printHeader(split_request[i].split(":")[0], temp);
+      }
 
       //-----------Finally the body is extracted------------------
       if(headbody.length == 2)
