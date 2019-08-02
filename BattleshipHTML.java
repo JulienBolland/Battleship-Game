@@ -36,6 +36,7 @@ class BattleshipHTML{
     head = head.concat("<link rel=\"icon\" type=\"image/png\" href=\"http://example.com/myicon.png\">\n");
     return head.concat("</head>\n");
   }
+
   private String generateBodyHtml(String method, Game game){
     String body = "\n<body background=\"\">\n";
     int i = 0, j;
@@ -61,15 +62,19 @@ class BattleshipHTML{
 
     return body.concat("</body>\n");
   }
+
   private String getImage(int j, int i, Game game){
-    return "image.png";
+    return "images/water.png";
   }
 
   private String generateScript(String method){
     BattleshipImages tempo = new BattleshipImages();
     if(method.equals("GET")){
-      String temp = "<script>\n var plouf =\"" + tempo.getImage("plouf")+ "\"; var boom =\"" + tempo.getImage("boom") + "\"; var water =\"" + tempo.getImage("water")+ "\";\n\n\n" + getFile("actions.js") + "\n</script>\n";
-      temp = temp.concat("<noscript><form action=\"play.html\" method=\"POST\"> <center>Column:<select name=\"x\">");
+      return "<script>\n var plouf =\"" + tempo.getImage("plouf")+ "\"; var boom =\"" + tempo.getImage("boom") + "\"; var water =\"" + tempo.getImage("water")+ "\";\n\n\n" + getFile("actions.js") + "\n</script>\n";
+    }
+
+    if(method.equals("POST")){
+      String temp = "<noscript><form action=\"play.html\" method=\"POST\"> <center>Column:<select name=\"x\">\n";
       int i;
       for(i = 0; i < 10; i++)
         temp = temp.concat("<option value=\"" + Integer.toString(i)+ "\">" + Integer.toString(i) + "</option>\n");
@@ -77,17 +82,6 @@ class BattleshipHTML{
       for(i = 0; i < 10; i++)
         temp = temp.concat("<option value=\"" + Integer.toString(i)+ "\">" + String.valueOf((char) (i + 65)) + "</option>\n");
       return temp.concat("</select> </center> <center><input type=\"submit\" value=\"Shoot\"></input></center></form></noscript>\n");
-    }
-
-    if(method.equals("POST")){
-      String temp = "<form action=\"play.html\" method=\"POST\"> <center>Column:<select name=\"x\">\n";
-      int i;
-      for(i = 0; i < 10; i++)
-        temp = temp.concat("<option value=\"" + Integer.toString(i)+ "\">" + Integer.toString(i) + "</option>\n");
-      temp = temp.concat("</select> Line: <select name=\"y\">\n");
-      for(i = 0; i < 10; i++)
-        temp = temp.concat("<option value=\"" + Integer.toString(i)+ "\">" + String.valueOf((char) (i + 65)) + "</option>\n");
-      return temp.concat("</select> </center> <center><input type=\"submit\" value=\"Shoot\"></input></center></form>\n");
     }
     return null;
   }
