@@ -1,0 +1,75 @@
+/************************************************
+* Introduction to computer networking : Project 2
+*
+* Authors : Julien Bolland : s161622 @ULiège
+*           Thomas Mazur : s162939 @ULiège
+*
+* All rights reserved.
+************************************************/
+
+body{
+	background-color: lightgrey;
+}
+
+.h1{
+     margin-top: 15px;
+     text-align: center;
+     font-size: 45px;
+     width:75%;
+     font-family: normal, serif;
+}
+
+.h2{
+     margin-top: 0px;
+     font-size: 35px;
+}
+
+.h3{
+     margin-top: 0px;
+     font-size: 25px;
+}
+
+.h4{
+  margin-top: 0px;
+  font-size: small;
+}
+
+.focus{
+     margin: 15px auto;
+     margin-top: 15px;
+     padding: 10px 10px 10px 10px;
+     display: flex;
+     align-items: center;
+     flex-direction: column;
+     justify-content: center;
+     width : 50%;
+     min-height: 100px;
+     min-width: 100px;
+     background-color: lightgrey;
+     border: 1px solid;
+     border-radius: 5px;
+     box-shadow: 2px 2px 2px 0px #404040
+}
+
+.inputButton{
+  align-self: center;
+  text-align: center;
+  padding: 5px;
+  margin: auto;
+  border: 1px solid #333333;
+  font: normal 1em Verdana, sans-serif;
+  color: #FFFFFF;
+  background-color: rgb(0,0,0);
+  margin-top: 15px;
+  width: 150px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+td{
+  padding-bottom:0px;
+  border:1px solid gray;
+  width: 45px;
+  height: 45px;
+  text-align:center;
+}
