@@ -62,7 +62,24 @@ class BattleshipHTML{
     return body.concat("</body>\n");
   }
   private String getImage(int j, int i, Game game){
-    return "image.png";
+    BattleshipImages temp = new BattleshipImages();
+
+    if(game == null)
+      return temp.getImage("water");
+
+    String temptype = game.getBattlefield().getShip(i, j).getType();
+    if(temptype == "water"){
+      if(game.getBattlefield().getShip(i, j).isTouched())
+        return temp.getImage("plouf");
+      else
+        return temp.getImage("water");
+    }
+    else{
+      if(game.getBattlefield().getShip(i, j).isTouched())
+        return temp.getImage("boom");
+      else
+        return temp.getImage("water");
+    }
   }
 
   private String generateScript(String method){
@@ -98,14 +115,16 @@ class BattleshipHTML{
   }
 
   private String getFile(String path){
-    String filecontent= "", line;
+    String filecontent= "";
     try{
-      BufferedReader br = new BufferedReader(new FileReader(new File(path)));
-			while((line = br.readLine()) != null)
-				filecontent += line;
+      File file = new File(path);
+      char[] temp = new char[(int) file.length()-2];
+      FileReader fr = new FileReader(file);
+      fr.read(temp);
+      filecontent = new String(temp);
     }
     catch(IOException e){
-      e.printStackTrace();
+      System.err.print(e.getMessage());
     }
     return filecontent;
   }
