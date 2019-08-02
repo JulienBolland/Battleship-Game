@@ -13,17 +13,22 @@ import java.util.*;
 
 class BattleshipEmitter{
 
-  private OutputStream serverOut;
+  private Socket sock;
 
   //Constructor
-  public BattleshipEmitter(OutputStream serverOut){
-    this.serverOut = serverOut;
+  public BattleshipEmitter(Socket _sock){
+
+      this.sock = _sock;
+
   }
 
   //This methods sends the response in the OutputStream in chuncked
   //encoding (gzip compression if enabled has already been done)
   public void send(HttpHandler request){
     try{
+      System.out.println("Hey");
+      OutputStream serverOut = sock.getOutputStream();
+      System.out.println("Ho");
       byte[][] msg = request.getHttp();
       // We retrieve the type of charset used
       String charset = "";
@@ -33,11 +38,12 @@ class BattleshipEmitter{
         charset += s.charAt(i);
       }
       // Writing the headers
-      serverOut.write(msg[0]);
+      serverOut.write(msg[0], 0, msg.length);
       // Writing the body with chuncked encoding
-      serverOut.write(msg[1]);
+      //serverOut.write(msg[1]);
       // Flushing
       serverOut.flush();
+      serverOut.close();
     }
     catch(IOException e){
       System.out.println(e.getMessage());

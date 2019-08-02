@@ -19,7 +19,6 @@ public class Worker extends Thread{
   private static ArrayList<Game> listOfGames;
   private Socket sock;
   private InputStream sin;
-  private OutputStream sout;
   private HttpHandler httpresponse;
   private HttpHandler httpreq;
 
@@ -28,7 +27,7 @@ public class Worker extends Thread{
       this.sock = _sock;
       listOfGames = list;
       this.sin = _sock.getInputStream();
-      this.sout = _sock.getOutputStream();
+
     }
     catch(IOException e){
       System.out.println("Error during the creation of the worker: "+e.getMessage());
@@ -46,7 +45,7 @@ public class Worker extends Thread{
       ArrayList<String[]> query = null;
       //Request reception
       BattleshipReceiver msgrecept = new BattleshipReceiver(sin);
-      BattleshipEmitter emitter = new BattleshipEmitter(sout);
+      BattleshipEmitter emitter = new BattleshipEmitter(sock);
 
       //Parsing of the received message and initialization of response.
       httpreq = new HttpHandler(msgrecept.get_Message(sin));
@@ -221,7 +220,6 @@ public class Worker extends Thread{
 
       //Close the socket and the server.
       System.out.println("\nFinished treating request, closing connection");
-      sout.close();
       sock.close();
     }
     catch(BattleshipException e){
