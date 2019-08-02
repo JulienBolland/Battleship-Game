@@ -64,7 +64,28 @@ class BattleshipHTML{
   }
 
   private String getImage(int j, int i, Game game){
+<<<<<<< HEAD
     return "images/water.png";
+=======
+    BattleshipImages temp = new BattleshipImages();
+
+    if(game == null)
+      return temp.getImage("water");
+
+    String temptype = game.getBattlefield().getShip(i, j).getType();
+    if(temptype == "water"){
+      if(game.getBattlefield().getShip(i, j).isTouched())
+        return temp.getImage("plouf");
+      else
+        return temp.getImage("water");
+    }
+    else{
+      if(game.getBattlefield().getShip(i, j).isTouched())
+        return temp.getImage("boom");
+      else
+        return temp.getImage("water");
+    }
+>>>>>>> 2d246c1b7765baab738ab8d9edacbf8ea35ffc4b
   }
 
   private String generateScript(String method){
@@ -92,14 +113,16 @@ class BattleshipHTML{
   }
 
   private String getFile(String path){
-    String filecontent= "", line;
+    String filecontent= "";
     try{
-      BufferedReader br = new BufferedReader(new FileReader(new File(path)));
-			while((line = br.readLine()) != null)
-				filecontent += line;
+      File file = new File(path);
+      char[] temp = new char[(int) file.length()-2];
+      FileReader fr = new FileReader(file);
+      fr.read(temp);
+      filecontent = new String(temp);
     }
     catch(IOException e){
-      e.printStackTrace();
+      System.err.print(e.getMessage());
     }
     return filecontent;
   }
