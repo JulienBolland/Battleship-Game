@@ -29,7 +29,7 @@ class BattleshipReceiver{
         Guardian = !stringBuilder.toString().contains("\r\n\r\n");
   		}
   	}
-
+    System.out.println("Requête reçue:\n\n" + stringBuilder.toString() + "\n\n");
   	return stringBuilder.toString();
   }
 
