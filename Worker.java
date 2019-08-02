@@ -27,7 +27,6 @@ public class Worker extends Thread{
       this.sock = _sock;
       listOfGames = list;
       this.sin = _sock.getInputStream();
-
     }
     catch(IOException e){
       System.out.println("Error during the creation of the worker: "+e.getMessage());
@@ -44,11 +43,11 @@ public class Worker extends Thread{
       Game currentGame = null;
       ArrayList<String[]> query = null;
       //Request reception
-      BattleshipReceiver msgrecept = new BattleshipReceiver(sin);
+      BattleshipReceiver msgrecept = new BattleshipReceiver(sock);
       BattleshipEmitter emitter = new BattleshipEmitter(sock);
 
       //Parsing of the received message and initialization of response.
-      httpreq = new HttpHandler(msgrecept.get_Message(sin));
+      httpreq = new HttpHandler(msgrecept.get_Message());
       httpresponse = new HttpHandler();
 
       URL myURL = httpreq.getURL();
