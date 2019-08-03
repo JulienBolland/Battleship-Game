@@ -16,7 +16,7 @@ class BattleshipImages{
     imagesBase64 = new String[4];
     imagesBase64[0] = toBase64("images/water.png");
     imagesBase64[1] = toBase64("images/bomb.png");
-    imagesBase64[2] = toBase64("images/boom.jpg");
+    imagesBase64[2] = toBase64("images/boom.png");
     imagesBase64[3] = toBase64("images/plouf.png");
   }
 
