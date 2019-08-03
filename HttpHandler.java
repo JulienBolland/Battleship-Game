@@ -264,14 +264,7 @@ class HttpHandler{
     Date date = new Date();
     printHeader("Date", dateForm.format(date));
 
-    Http = Http + method[0] + " " + method[1] + "\r\n";
-    int i;
-    for(i = 0; i < headers.size(); i++)
-      Http = Http + headers.get(i)[0] + ": " + headers.get(i)[1] + "\r\n";
-    Http = Http + "\r\n";
-
     try{
-      httpmsg[0] = Http.getBytes();
       if(getHeader("Content-Encoding") != null && getHeader("Content-Encoding").contains("gzip"))
         encodeGzip(baos);
       else
@@ -281,6 +274,15 @@ class HttpHandler{
       System.err.println(e.getMessage());
     }
     httpmsg[1] = baos.toByteArray();
+    printHeader("Content-Length", Integer.toString(httpmsg[1].length));
+
+    Http = Http + method[0] + " " + method[1] + "\r\n";
+    int i;
+    for(i = 0; i < headers.size(); i++)
+      Http = Http + headers.get(i)[0] + ": " + headers.get(i)[1] + "\r\n";
+    Http = Http + "\r\n";
+
+    httpmsg[0] = Http.getBytes();
     return httpmsg;
   }
 
@@ -291,10 +293,12 @@ class HttpHandler{
     try{
       GZIPOutputStream gzipos = new GZIPOutputStream(baos);
       gzipos.write(body.getBytes(), 0, body.length());
+      gzipos.close();
     }
     catch(IOException e){
       System.err.println(e.getMessage());
     }
   }
+
 
 }

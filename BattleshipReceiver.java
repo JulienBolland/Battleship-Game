@@ -41,6 +41,7 @@ class BattleshipReceiver{
     catch(Exception e){
       System.out.println("Error while reading buffer : " + e.getMessage());
     }
+    System.out.println("\n\nRequest:\n" + headers + body);
   	return headers + body;
   }
 
