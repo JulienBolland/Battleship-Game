@@ -186,13 +186,14 @@ class HttpHandler{
       }
     }
     if(i == headers.size())
-      System.out.println("No such header found");
+      System.out.println("No such header found. Proceed..");
   }
 
   /*printBody, modifies the body of the Http request*/
   public void printBody(String content){
     body = content;
-    printHeader("Content-Length", Integer.toString(content.length()));
+    if(method[0].contains("HTTP/1.0") || method[1].contains("HTTP/1.0"))
+      printHeader("Content-Length", Integer.toString(content.length()));
   }
 
   /*printMethod modifies the method of the Httprequest*/
@@ -260,10 +261,12 @@ class HttpHandler{
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
     byte[][] httpmsg = new byte[2][];
 
+    //The date is written into the "Date" header
     SimpleDateFormat dateForm = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss z");
     Date date = new Date();
     printHeader("Date", dateForm.format(date));
 
+    //Body is gzip encoded if and only if the client accepts it-----------------
     try{
       if(getHeader("Content-Encoding") != null && getHeader("Content-Encoding").contains("gzip"))
         encodeGzip(baos);
@@ -274,8 +277,17 @@ class HttpHandler{
       System.err.println(e.getMessage());
     }
     httpmsg[1] = baos.toByteArray();
-    printHeader("Content-Length", Integer.toString(httpmsg[1].length));
+    //--------------------------------------------------------------------------
 
+    //The content length is updated. If it is HTTP/1.0 else we'll chunk encode.
+    if(method[1].contains("HTTP/1.0") || method[0].contains("HTTP/1.0"))
+      printHeader("Content-Length", Integer.toString(httpmsg[1].length));
+    else if(method[1].contains("HTTP/1.1") || method[0].contains("HTTP/1.1")){
+      if(getHeader("Content-Length") != null){removeHeader("Content-Length");}
+      printHeader("Transfert-Encoding", "chunked");
+    }
+
+    //Headers are prepared.
     Http = Http + method[0] + " " + method[1] + "\r\n";
     int i;
     for(i = 0; i < headers.size(); i++)
