@@ -160,7 +160,6 @@ class HttpHandler{
       temp = new String[] {query.split("&")[i].split("=")[0], query.split("&")[i].split("=")[1]};
       parsedquery.add(temp);
     }
-
     return parsedquery;
   }
 

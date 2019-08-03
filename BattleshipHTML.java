@@ -86,21 +86,17 @@ class BattleshipHTML{
 
   private String generateScript(String method){
     BattleshipImages tempo = new BattleshipImages();
-    if(method.equals("GET")){
-      return "<script>\n var plouf =\"" + tempo.getImage("plouf")+ "\"; var boom =\"" + tempo.getImage("boom") + "\"; var water =\"" + tempo.getImage("water")+ "\";\n\n\n" + getFile("actions.js") + "\n</script>\n";
-    }
 
-    if(method.equals("POST")){
-      String temp = "<noscript><form action=\"play.html\" method=\"POST\"> <center>Column:<select name=\"x\">\n";
-      int i;
-      for(i = 0; i < 10; i++)
-        temp = temp.concat("<option value=\"" + Integer.toString(i)+ "\">" + Integer.toString(i) + "</option>\n");
-      temp = temp.concat("</select> Line: <select name=\"y\">\n");
-      for(i = 0; i < 10; i++)
-        temp = temp.concat("<option value=\"" + Integer.toString(i)+ "\">" + String.valueOf((char) (i + 65)) + "</option>\n");
-      return temp.concat("</select> </center> <center><input type=\"submit\" value=\"Shoot\"></input></center></form></noscript>\n");
-    }
-    return null;
+    String temp = "<script>\n var plouf =\"" + tempo.getImage("plouf")+ "\"; var boom =\"" + tempo.getImage("boom") + "\"; var water =\"" + tempo.getImage("water")+ "\";\n\n\n" + getFile("actions.js") + "\n</script>\n";
+    temp = temp.concat("<noscript><form action=\"play.html\" method=\"POST\"> <center>Column:<select name=\"x\">\n");
+    int i;
+    for(i = 0; i < 10; i++)
+      temp = temp.concat("<option value=\"" + Integer.toString(i)+ "\">" + Integer.toString(i) + "</option>\n");
+    temp = temp.concat("</select> Line: <select name=\"y\">\n");
+    for(i = 0; i < 10; i++)
+      temp = temp.concat("<option value=\"" + Integer.toString(i)+ "\">" + String.valueOf((char) (i + 65)) + "</option>\n");
+    return temp.concat("</select> </center> <center><input type=\"submit\" value=\"Shoot\"></input></center></form></noscript>\n");
+
   }
 
 

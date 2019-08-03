@@ -21,12 +21,15 @@ public class Worker extends Thread{
   private InputStream sin;
   private HttpHandler httpresponse;
   private HttpHandler httpreq;
+  BattleshipEmitter emitter;
 
   public Worker(Socket _sock, ArrayList<Game> list){
     try{
       this.sock = _sock;
       listOfGames = list;
       this.sin = _sock.getInputStream();
+      httpresponse = new HttpHandler();
+      emitter = new BattleshipEmitter(sock);
     }
     catch(IOException e){
       System.out.println("Error during the creation of the worker: "+e.getMessage());
@@ -35,8 +38,8 @@ public class Worker extends Thread{
   @Override
   public void run(){
     try{
-      // The socket expires after 2 minutes if the client doesn't respond
-      sock.setSoTimeout(120000);
+      // The socket expires after 60 seconds if the client doesn't respond
+      sock.setSoTimeout(60000);
       //Initialization of parameters
       HttpCookie cookie = null;
       BattleshipHTML htmlGenerator = new BattleshipHTML();
@@ -44,11 +47,9 @@ public class Worker extends Thread{
       ArrayList<String[]> query = null;
       //Request reception
       BattleshipReceiver msgrecept = new BattleshipReceiver(sock);
-      BattleshipEmitter emitter = new BattleshipEmitter(sock);
 
       //Parsing of the received message and initialization of response.
       httpreq = new HttpHandler(msgrecept.get_Message());
-      httpresponse = new HttpHandler();
 
       URL myURL = httpreq.getURL();
       query = httpreq.getQuery();
@@ -111,9 +112,9 @@ public class Worker extends Thread{
 
             //Construction of the response
             cookie.getValue();
-            httpresponse.printHeader("Set-Cookie", cookie.getValue() + "; path=/");
-          //  if(httpreq.getHeader("Accept-Encoding") != null && httpreq.getHeader("Accept-Encoding").contains("gzip"))
-            //  httpresponse.printHeader("Content-Encoding", "gzip");
+            httpresponse.printHeader("Set-Cookie", /*cookie.getValue()+ */"; path=/");
+            //if(httpreq.getHeader("Accept-Encoding") != null && httpreq.getHeader("Accept-Encoding").contains("gzip"))
+              //httpresponse.printHeader("Content-Encoding", "gzip");
             httpresponse.printBody(htmlGenerator.generateHtml("GET", currentGame));
             emitter.send(httpresponse);
           }
@@ -131,19 +132,26 @@ public class Worker extends Thread{
       }
 
 
-
-
       //Second part: Post method
       else if(httpreq.getMethod().equals("POST")){
-
         //Redirection to play.html
         if(myURL.getPath().equals("/")){
           httpresponse.printStatus(303);
           httpresponse.printHeader("Location", "/play.html");
           emitter.send(httpresponse);
         }
-        else if(myURL.getPath().equals("/play.html")){
+
+
+        System.out.println("------Http response of server-----");
+        httpresponse.displayHttp();
+        System.out.println("------Httprequest of client-----");
+        httpreq.displayHttp();
+
+
+        if(myURL.getPath().equals("/play.html")){
+          System.out.println("-----In play.html-----");
           if(currentGame != null && query != null && queryCheck(query)){
+            System.out.println("------On est dedans-----");
             //Collecting the attempt
             int[] attempt = new int[2] ;
             attempt[0] = Integer.parseInt(query.get(0)[1]);
@@ -156,8 +164,8 @@ public class Worker extends Thread{
             if(currentGame.isWin()){
               httpresponse.printHeader("Set-Cookie", "SESSID=deleted; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT");
               httpresponse.printHeader("Content-Type", "text/html; charset=utf-8");
-            //  if(httpreq.getHeader("Accept-Encoding") != null && httpreq.getHeader("Accept-Encoding").contains("gzip"))
-              //  httpresponse.printHeader("Content-Encoding", "gzip");
+              //if(httpreq.getHeader("Accept-Encoding") != null && httpreq.getHeader("Accept-Encoding").contains("gzip"))
+                //httpresponse.printHeader("Content-Encoding", "gzip");
               cookie = null;
               emitter.send(httpresponse);
             }
@@ -165,15 +173,16 @@ public class Worker extends Thread{
             else if(currentGame.gameOver()){
               httpresponse.printHeader("Set-Cookie", "SESSID=deleted; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT");
               httpresponse.printHeader("Content-Type", "text/html; charset=utf-8");
-            //  if(httpreq.getHeader("Accept-Encoding") != null && httpreq.getHeader("Accept-Encoding").contains("gzip"))
-              //  httpresponse.printHeader("Content-Encoding", "gzip");
+              //if(httpreq.getHeader("Accept-Encoding") != null && httpreq.getHeader("Accept-Encoding").contains("gzip"))
+                //httpresponse.printHeader("Content-Encoding", "gzip");
               cookie = null;
               emitter.send(httpresponse);
             }
             //Page actualisation
             else{
-            //  if(httpreq.getHeader("Accept-Encoding") != null && httpreq.getHeader("Accept-Encoding").contains("gzip"))
-              //  httpresponse.printHeader("Content-Encoding", "gzip");
+              System.out.println("-----Actualisation in play.html-----");
+              //if(httpreq.getHeader("Accept-Encoding") != null && httpreq.getHeader("Accept-Encoding").contains("gzip"))
+                //httpresponse.printHeader("Content-Encoding", "gzip");
               httpresponse.printHeader("Content-Type", "text/html; charset=utf-8");
               httpresponse.printBody(htmlGenerator.generateHtml("POST", currentGame));
               emitter.send(httpresponse);
@@ -181,8 +190,8 @@ public class Worker extends Thread{
           }
           //Page actualisation
           else if(currentGame != null && query == null){
-          //  if(httpreq.getHeader("Accept-Encoding") != null && httpreq.getHeader("Accept-Encoding").contains("gzip"))
-            //  httpresponse.printHeader("Content-Encoding", "gzip");
+            //if(httpreq.getHeader("Accept-Encoding") != null && httpreq.getHeader("Accept-Encoding").contains("gzip"))
+              //httpresponse.printHeader("Content-Encoding", "gzip");
             httpresponse.printHeader("Content-Type", "text/html; charset=utf-8");
             httpresponse.printBody(htmlGenerator.generateHtml("POST", currentGame));
             emitter.send(httpresponse);
@@ -191,15 +200,15 @@ public class Worker extends Thread{
           else if(currentGame == null && query == null){
             cookie = newCookie();
             currentGame = getGame(cookie);
-          //  if(httpreq.getHeader("Accept-Encoding") != null && httpreq.getHeader("Accept-Encoding").contains("gzip"))
-            //  httpresponse.printHeader("Content-Encoding", "gzip");
+            //if(httpreq.getHeader("Accept-Encoding") != null && httpreq.getHeader("Accept-Encoding").contains("gzip"))
+              //httpresponse.printHeader("Content-Encoding", "gzip");
             httpresponse.printHeader("Content-Type", "text/html; charset=utf-8");
-            httpresponse.printHeader("Set-Cookie", cookie.getValue() + "; path=/");
             httpresponse.printBody(htmlGenerator.generateHtml("POST", currentGame));
             emitter.send(httpresponse);
           }
-          else
+          else{
             throw new BattleshipException("400");
+          }
         }
         else if(myURL.getPath().equals("/halloffame.html")){
           httpresponse.printStatus(303);
@@ -215,15 +224,9 @@ public class Worker extends Thread{
       else
         throw new BattleshipException("501");
 
-
-
-
-      //Close the socket and the server.
-      System.out.println("\nFinished treating request, closing connection");
-      sock.close();
     }
     catch(BattleshipException e){
-      //Jesaispasencore
+      emitter.send(e.getErrorMessage());
     }
     catch(SocketException e){
 			System.err.println(e.getMessage());
@@ -233,6 +236,16 @@ public class Worker extends Thread{
     }
 		catch(IOException e){
       System.err.println(e.getMessage());
+    }
+    finally{
+      //Close the socket and the server.
+      System.out.println("\nFinished treating request, closing connection");
+      try{
+        sock.close();
+      }
+      catch(IOException e){
+        System.err.println(e.getMessage());
+      }
     }
   }
 

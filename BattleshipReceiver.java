@@ -19,6 +19,10 @@ class BattleshipReceiver{
     InputStream inputStream = sock.getInputStream();
   	StringBuilder stringBuilder = new StringBuilder();
   	String line = null;
+    //headers
+    String headers = "";
+    //body
+    String body = "";
     boolean Guardian = true;
 
   	try{
@@ -28,12 +32,16 @@ class BattleshipReceiver{
   			stringBuilder.append(line + "\r\n");
         Guardian = !stringBuilder.toString().contains("\r\n\r\n");
   		}
+      headers = stringBuilder.toString();
+      int value;
+      while(bufferedReader.ready() && (value = bufferedReader.read()) != -1){
+        body += Character.toString((char)value);
+      }
   	}
     catch(Exception e){
       System.out.println("Error while reading buffer : " + e.getMessage());
     }
-    System.out.println("Requête reçue:\n\n" + stringBuilder.toString() + "\n\n");
-  	return stringBuilder.toString();
+  	return headers + body;
   }
 
 }
