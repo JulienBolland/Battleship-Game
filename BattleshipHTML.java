@@ -65,7 +65,7 @@ class BattleshipHTML{
     return body.concat("</body>\n");
   }
 
-  private String getImage(int i, int j, Game game){
+  private String getImage(int j, int i, Game game){
 
     if(game == null)
       return im.getImage("water");
