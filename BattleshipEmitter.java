@@ -14,6 +14,7 @@ import java.util.*;
 class BattleshipEmitter{
 
   private Socket sock;
+  static int CHUNKSIZE = 4095;
 
   //Constructor
   public BattleshipEmitter(Socket _sock){
@@ -22,21 +23,26 @@ class BattleshipEmitter{
 
   //This methods sends the response in the OutputStream in chuncked
   //encoding (gzip compression if enabled has already been done)
-  public void send(HttpHandler request){
+  public void send(HttpHandler response){
     try{
       OutputStream serverOut = sock.getOutputStream();
-      byte[][] msg = request.getHttp();
+      byte[][] msg = response.getHttp();
       // We retrieve the type of charset used
       String charset = "";
-      String s = request.getHeader("Content-Type");
+      String s = response.getHeader("Content-Type");
       int i = s.indexOf("charset=")+8; // 8 = (length of "charset=")
       for(; i < s.length(); i++){
         charset += s.charAt(i);
       }
+      System.out.println(charset);
+      response.removeHeader("Transfert-Encoding");
       // Writing the headers
       serverOut.write(msg[0]);
-      // Writing the body with chuncked encoding
-      serverOut.write(msg[1]);
+      // Writing the body
+      if(response.getHeader("Transfert-Encoding") == null)
+        serverOut.write(msg[1]);
+      else if(response.getHeader("Transfert-Encoding").contains("chunked"))
+        chunckedEncoding(charset, msg[1]);
       // Flushing
       serverOut.flush();
       System.out.println("\n\nResponse:");
@@ -49,18 +55,33 @@ class BattleshipEmitter{
 
   // This methods receives the body in byte, and returns the chuncked
   // encoded body.
-  private byte[] chunckedEncoding(String charset, byte[] body){
-    ByteArrayOutputStream concat = new ByteArrayOutputStream();
-    byte[] msg = null;
+  private void chunckedEncoding(String charset, byte[] body){
+
+    int i = 0;
+    ByteArrayOutputStream baos = new ByteArrayOutputStream();
     try{
-      concat.write((Integer.toHexString(body.length) + "\r\n").getBytes(charset));
-      concat.write((body));
-      concat.write(("\r\n" + "0").getBytes(charset));
+      OutputStream sout = sock.getOutputStream();
+      while(body.length > CHUNKSIZE * (i + 1)){
+        sout.write(Integer.toHexString(CHUNKSIZE).getBytes(charset));
+        sout.write("\r\n".getBytes());
+        sout.write(body, i * CHUNKSIZE, CHUNKSIZE);
+        System.out.println("\n\n\n\n\nChunk launch:\n" + Integer.toHexString(CHUNKSIZE));
+        sout.flush();
+        sout.write("\r\n".getBytes());
+        i++;
+      }
+      if(body.length - i * CHUNKSIZE > 0){
+        sout.write(Integer.toHexString(body.length - i * CHUNKSIZE).getBytes(charset));
+        sout.write(body, i * CHUNKSIZE, body.length - i *CHUNKSIZE);
+        System.out.println("\n\n\n\n\nChunk launch:\n" + Integer.toHexString(body.length - i * CHUNKSIZE));
+        sout.flush();
+        sout.write("\r\n".getBytes());
+      }
+      sout.write(Integer.toHexString(0).getBytes(charset));
+      System.out.println("\n\n\n\n\nChunk launch:\n 0");
     }
     catch(IOException e){
-      System.out.println(e.getMessage());
+      System.err.print(e.getMessage());
     }
-    msg = concat.toByteArray();
-    return msg;
   }
 }
