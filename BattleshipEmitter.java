@@ -39,6 +39,8 @@ class BattleshipEmitter{
       serverOut.write(msg[1]);
       // Flushing
       serverOut.flush();
+      System.out.println("Response:");
+      System.out.println(new String(msg[0]));
     }
     catch(IOException e){
       System.out.println(e.getMessage());

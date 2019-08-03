@@ -112,7 +112,7 @@ public class Worker extends Thread{
 
             //Construction of the response
             cookie.getValue();
-            httpresponse.printHeader("Set-Cookie", /*cookie.getValue()+ */"; path=/");
+            httpresponse.printHeader("Set-Cookie", cookie.getValue() + "; path=/");
             //if(httpreq.getHeader("Accept-Encoding") != null && httpreq.getHeader("Accept-Encoding").contains("gzip"))
               //httpresponse.printHeader("Content-Encoding", "gzip");
             httpresponse.printBody(htmlGenerator.generateHtml("GET", currentGame));
@@ -142,16 +142,8 @@ public class Worker extends Thread{
         }
 
 
-        System.out.println("------Http response of server-----");
-        httpresponse.displayHttp();
-        System.out.println("------Httprequest of client-----");
-        httpreq.displayHttp();
-
-
         if(myURL.getPath().equals("/play.html")){
-          System.out.println("-----In play.html-----");
           if(currentGame != null && query != null && queryCheck(query)){
-            System.out.println("------On est dedans-----");
             //Collecting the attempt
             int[] attempt = new int[2] ;
             attempt[0] = Integer.parseInt(query.get(0)[1]);
@@ -180,7 +172,6 @@ public class Worker extends Thread{
             }
             //Page actualisation
             else{
-              System.out.println("-----Actualisation in play.html-----");
               //if(httpreq.getHeader("Accept-Encoding") != null && httpreq.getHeader("Accept-Encoding").contains("gzip"))
                 //httpresponse.printHeader("Content-Encoding", "gzip");
               httpresponse.printHeader("Content-Type", "text/html; charset=utf-8");
