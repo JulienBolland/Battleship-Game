@@ -18,9 +18,11 @@ import java.nio.charset.StandardCharsets;
 
 class BattleshipHTML{
   private String htmlCode;
+  private BattleshipImages im;
 
   public BattleshipHTML(){
     htmlCode = "";
+    im = new BattleshipImages();
   }
 
   public String generateHtml(String method, Game game){
@@ -64,23 +66,22 @@ class BattleshipHTML{
   }
 
   private String getImage(int i, int j, Game game){
-    BattleshipImages temp = new BattleshipImages();
 
     if(game == null)
-      return temp.getImage("water");
+      return im.getImage("water");
 
     String temptype = game.getBattlefield().getShip(i, j).getType();
     if(temptype == "water"){
       if(game.getBattlefield().getShip(i, j).isTouched())
-        return temp.getImage("plouf");
+        return im.getImage("plouf");
       else
-        return temp.getImage("water");
+        return im.getImage("water");
     }
     else{
       if(game.getBattlefield().getShip(i, j).isTouched())
-        return temp.getImage("boom");
+        return im.getImage("boom");
       else
-        return temp.getImage("water");
+        return im.getImage("water");
     }
   }
 
