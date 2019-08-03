@@ -63,10 +63,7 @@ class BattleshipHTML{
     return body.concat("</body>\n");
   }
 
-  private String getImage(int j, int i, Game game){
-<<<<<<< HEAD
-    return "images/water.png";
-=======
+  private String getImage(int i, int j, Game game){
     BattleshipImages temp = new BattleshipImages();
 
     if(game == null)
@@ -85,7 +82,6 @@ class BattleshipHTML{
       else
         return temp.getImage("water");
     }
->>>>>>> 2d246c1b7765baab738ab8d9edacbf8ea35ffc4b
   }
 
   private String generateScript(String method){
