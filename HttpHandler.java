@@ -284,7 +284,7 @@ class HttpHandler{
       printHeader("Content-Length", Integer.toString(httpmsg[1].length));
     else if(method[1].contains("HTTP/1.1") || method[0].contains("HTTP/1.1")){
       if(getHeader("Content-Length") != null){removeHeader("Content-Length");}
-      printHeader("Transfert-Encoding", "chunked");
+      printHeader("Transfer-Encoding", "chunked");
     }
 
     //Headers are prepared.

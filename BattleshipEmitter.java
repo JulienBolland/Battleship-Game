@@ -34,15 +34,17 @@ class BattleshipEmitter{
       for(; i < s.length(); i++){
         charset += s.charAt(i);
       }
-      System.out.println(charset);
-      response.removeHeader("Transfert-Encoding");
       // Writing the headers
       serverOut.write(msg[0]);
+
       // Writing the body
-      if(response.getHeader("Transfert-Encoding") == null)
+      if(response.getHeader("Transfer-Encoding") == null)
         serverOut.write(msg[1]);
-      else if(response.getHeader("Transfert-Encoding").contains("chunked"))
+      else if(response.getHeader("Transfer-Encoding").contains("chunked")){
         chunckedEncoding(charset, msg[1]);
+        serverOut.write(Integer.toHexString(0).getBytes(charset));
+        serverOut.write("\r\n\r\n".getBytes(charset));
+      }
       // Flushing
       serverOut.flush();
       System.out.println("\n\nResponse:");
@@ -58,27 +60,23 @@ class BattleshipEmitter{
   private void chunckedEncoding(String charset, byte[] body){
 
     int i = 0;
-    ByteArrayOutputStream baos = new ByteArrayOutputStream();
     try{
       OutputStream sout = sock.getOutputStream();
-      while(body.length > CHUNKSIZE * (i + 1)){
+      while(body.length >= CHUNKSIZE * (i + 1)){
         sout.write(Integer.toHexString(CHUNKSIZE).getBytes(charset));
-        sout.write("\r\n".getBytes());
+        sout.write("\r\n".getBytes(charset));
         sout.write(body, i * CHUNKSIZE, CHUNKSIZE);
-        System.out.println("\n\n\n\n\nChunk launch:\n" + Integer.toHexString(CHUNKSIZE));
+        sout.write("\r\n".getBytes(charset));
         sout.flush();
-        sout.write("\r\n".getBytes());
         i++;
       }
       if(body.length - i * CHUNKSIZE > 0){
         sout.write(Integer.toHexString(body.length - i * CHUNKSIZE).getBytes(charset));
+        sout.write("\r\n".getBytes(charset));
         sout.write(body, i * CHUNKSIZE, body.length - i *CHUNKSIZE);
-        System.out.println("\n\n\n\n\nChunk launch:\n" + Integer.toHexString(body.length - i * CHUNKSIZE));
         sout.flush();
-        sout.write("\r\n".getBytes());
+        sout.write("\r\n".getBytes(charset));
       }
-      sout.write(Integer.toHexString(0).getBytes(charset));
-      System.out.println("\n\n\n\n\nChunk launch:\n 0");
     }
     catch(IOException e){
       System.err.print(e.getMessage());
