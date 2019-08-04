@@ -16,14 +16,21 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 class WebServer{
+  private static final int DEFAULT_MAX_THREAD = 10;
   private static ExecutorService pool;
   private static ArrayList<Game> listOfGames = new ArrayList<Game>();
 
-  public static void main(String args[]) throws Exception{
+  public static void main(String args[]){
 
     try{
       System.out.print("Openning server on port 8018...\n");
-      int maxThread = Integer.parseInt(args[0]);
+      int maxThread = DEFAULT_MAX_THREAD;
+      if(args.length == 1)
+        maxThread = Integer.parseInt(args[0]);
+      else if(args.length == 0);
+      else
+        throw new IllegalArgumentException("Too much argument entered..");
+
       pool = Executors.newFixedThreadPool(maxThread);
       ServerSocket ss = new ServerSocket(8018);
 
