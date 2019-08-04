@@ -153,7 +153,7 @@ class HttpHandler{
     if(method[0].equals("POST"))
       query = body;
     if (query == null || !query.contains("="))
-      return null;
+      return query;
 
     int i;
     for(i = 0; i < query.split("&").length; i++){
