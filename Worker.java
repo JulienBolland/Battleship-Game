@@ -26,6 +26,8 @@ public class Worker extends Thread{
 
   public Worker(Socket _sock, ArrayList<Game> list){
     try{
+      if(listOfCookies == null)
+        listOfCookies = new ArrayList<HttpCookie>();
       this.sock = _sock;
       listOfGames = list;
       this.sin = _sock.getInputStream();
@@ -41,7 +43,7 @@ public class Worker extends Thread{
     try{
       purgeCookie();
       // The socket expires after 10 miliseconds if the client doesn't respond
-      sock.setSoTimeout(10);
+      sock.setSoTimeout(100);
       //Initialization of parameters
       HttpCookie cookie = null;
       BattleshipHTML htmlGenerator = new BattleshipHTML();
