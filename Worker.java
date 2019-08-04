@@ -17,6 +17,7 @@ import java.nio.charset.StandardCharsets;
 public class Worker extends Thread{
 
   private static ArrayList<Game> listOfGames;
+  private static ArrayList<HttpCookie> listOfCookies;
   private Socket sock;
   private InputStream sin;
   private HttpHandler httpresponse;
@@ -38,6 +39,7 @@ public class Worker extends Thread{
   @Override
   public void run(){
     try{
+      purgeCookie();
       // The socket expires after 10 miliseconds if the client doesn't respond
       sock.setSoTimeout(10);
       //Initialization of parameters
@@ -86,6 +88,7 @@ public class Worker extends Thread{
             //If the player wins
             if(currentGame.isWin()){
               listOfGames.remove(currentGame);
+              removeCookie(cookie);
               httpresponse.printHeader("Set-Cookie", "SESSID=deleted; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT");
               win = "true";
               cookie = null;
@@ -93,6 +96,7 @@ public class Worker extends Thread{
             // If the player looses
             if(currentGame.gameOver()){
               listOfGames.remove(currentGame);
+              removeCookie(cookie);
               httpresponse.printHeader("Set-Cookie", "SESSID=deleted; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT");
               gameOver = "true";
               cookie = null;
@@ -164,6 +168,8 @@ public class Worker extends Thread{
               if(httpreq.getHeader("Accept-Encoding") != null && httpreq.getHeader("Accept-Encoding").contains("gzip"))
                 httpresponse.printHeader("Content-Encoding", "gzip");
               httpresponse.printBody(htmlGenerator.getEndPage("You won!"));
+              listOfGames.remove(currentGame);
+              removeCookie(cookie);
               cookie = null;
               emitter.send(httpresponse);
             }
@@ -174,6 +180,8 @@ public class Worker extends Thread{
               if(httpreq.getHeader("Accept-Encoding") != null && httpreq.getHeader("Accept-Encoding").contains("gzip"))
                 httpresponse.printHeader("Content-Encoding", "gzip");
               httpresponse.printBody(htmlGenerator.getEndPage("You lost!"));
+              listOfGames.remove(currentGame);
+              removeCookie(cookie);
               cookie = null;
               emitter.send(httpresponse);
             }
@@ -256,6 +264,7 @@ public class Worker extends Thread{
       // We set the timelife of the cookie
       cookie.setMaxAge(600);
       listOfGames.add(new Game(cookie));
+      listOfCookies.add(cookie);
     }
     return cookie;
 
@@ -275,6 +284,26 @@ public class Worker extends Thread{
 
   private boolean queryCheck(ArrayList<String[]> query){
     return query.size() == 2 && query.get(0)[0].equals("x") && query.get(1)[0].equals("y");
+  }
+
+  private void purgeCookie(){
+    int i;
+
+    for(i = 0; i < listOfCookies.size(); i++){
+      if(listOfCookies.get(i).hasExpired()){
+        listOfGames.remove(getGame(listOfCookies.get(i)));
+        listOfCookies.remove(i);
+      }
+    }
+  }
+
+  private void removeCookie(HttpCookie cookie){
+    int i;
+
+    for(i = 0; i < listOfCookies.size(); i++){
+      if(listOfCookies.get(i).getValue() == cookie.getValue())
+        listOfCookies.remove(i);
+    }
   }
 
 }
