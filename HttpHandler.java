@@ -152,8 +152,12 @@ class HttpHandler{
       query = _Url.getQuery();
     if(method[0].equals("POST"))
       query = body;
-    if (query == null || !query.contains("="))
-      return query;
+    if(query == null)
+      return null;
+    else if(!query.contains("=")){
+       parsedquery.add(new String[] {"query=", query});
+      return parsedquery;
+    }
 
     int i;
     for(i = 0; i < query.split("&").length; i++){
