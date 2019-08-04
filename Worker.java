@@ -98,6 +98,7 @@ public class Worker extends Thread{
               cookie = null;
             }
             httpresponse.printHeader("Content-Type", "JSON");
+            httpresponse.printHeader("No Chunk", "Full");
             httpresponse.printBody("{ \"win\":\""+win+"\", \"gameOver\":\""+gameOver+"\", \"hit\":"+hit+"}");
             emitter.send(httpresponse);
           }
@@ -162,6 +163,7 @@ public class Worker extends Thread{
               httpresponse.printHeader("Content-Type", "text/html; charset=utf-8");
               if(httpreq.getHeader("Accept-Encoding") != null && httpreq.getHeader("Accept-Encoding").contains("gzip"))
                 httpresponse.printHeader("Content-Encoding", "gzip");
+              httpresponse.printBody(htmlGenerator.getEndPage("You won!"));
               cookie = null;
               emitter.send(httpresponse);
             }
@@ -171,6 +173,7 @@ public class Worker extends Thread{
               httpresponse.printHeader("Content-Type", "text/html; charset=utf-8");
               if(httpreq.getHeader("Accept-Encoding") != null && httpreq.getHeader("Accept-Encoding").contains("gzip"))
                 httpresponse.printHeader("Content-Encoding", "gzip");
+              httpresponse.printBody(htmlGenerator.getEndPage("You lost!"));
               cookie = null;
               emitter.send(httpresponse);
             }
