@@ -6,17 +6,6 @@
 *
 * All rights reserved.
 ************************************************/
-for(var i = 0; i < 10; i ++){
-  for(var j = 0; j < 10; j++){
-    var id;
-    var num = 10*i +j;
-    if(num < 10)
-      id = "0" + num.toString(10);
-    else
-      id = num.toString(10);
-    document.getElementById(id).innerHTML = "<img src=\"data:image/png;base64, "+ water +"\" width=\"100%\" />";
-  }
-}
 for(var i = 0; i < 10; i++){
   for(var j = 0; j < 10; j++){
     var num =(i * 10) + j;

@@ -29,7 +29,7 @@ class WebServer{
         maxThread = Integer.parseInt(args[0]);
       else if(args.length == 0);
       else
-        throw new IllegalArgumentException("Too much argument entered..");
+        throw new IllegalArgumentException("Too many argument entered..");
 
       pool = Executors.newFixedThreadPool(maxThread);
       ServerSocket ss = new ServerSocket(8018);
