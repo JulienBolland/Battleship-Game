@@ -38,8 +38,8 @@ public class Worker extends Thread{
   @Override
   public void run(){
     try{
-      // The socket expires after 60 seconds if the client doesn't respond
-      sock.setSoTimeout(60000);
+      // The socket expires after 10 miliseconds if the client doesn't respond
+      sock.setSoTimeout(10);
       //Initialization of parameters
       HttpCookie cookie = null;
       BattleshipHTML htmlGenerator = new BattleshipHTML();
