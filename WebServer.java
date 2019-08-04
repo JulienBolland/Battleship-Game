@@ -41,7 +41,7 @@ class WebServer{
       }
 
     }
-    catch(IllegalArgumentException e){System.err.println("Enter a positive number of thread");}
+    catch(IllegalArgumentException e){System.err.println(e.getMessage());}
     catch(IOException ex){pool.shutdown();}
   }
 }
