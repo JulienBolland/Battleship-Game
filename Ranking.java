@@ -18,8 +18,9 @@ public class Ranking{
   private ArrayList<HallOfFame> hof = new ArrayList<HallOfFame>();
 
   // Constructor
-  public Ranking(){
-
+  public Ranking(ArrayList<Game> listOfGames){
+    for(int i = 0; i < listOfGames.size(); i++)
+      addGame(listOfGames.get(i));
   }
 
   // This method allows to add a game to the ranking.
@@ -27,7 +28,7 @@ public class Ranking{
   // than we do not add it. A sorting of the list takes place
   // in order to classify the players according to their scores.
   // ARGUMENTS : currGame => the game we want to add in the ranking
-  public void addGame(Game currGame){
+  private void addGame(Game currGame){
     HallOfFame newGame = new HallOfFame(currGame);
     // If the list of players if lower than 10, we add it automatically
     if(hof.size() < 10){
@@ -91,5 +92,9 @@ public class Ranking{
   // Gives the cookie of the player located at index i of the ranking list.
   public HttpCookie getCookie(int i){
     return hof.get(i).getCookie();
+  }
+
+  public int size(){
+    return hof.size();
   }
 }

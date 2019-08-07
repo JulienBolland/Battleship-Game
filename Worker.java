@@ -22,7 +22,8 @@ public class Worker extends Thread{
   private InputStream sin;
   private HttpHandler httpresponse;
   private HttpHandler httpreq;
-  BattleshipEmitter emitter;
+  private BattleshipEmitter emitter;
+  private Ranking gameRank = null;
 
   public Worker(Socket _sock, ArrayList<Game> list){
     try{
@@ -113,7 +114,7 @@ public class Worker extends Thread{
             if(httpreq.getHeader("Accept-Encoding") != null && httpreq.getHeader("Accept-Encoding").contains("gzip"))
               httpresponse.printHeader("Content-Encoding", "gzip");
             httpresponse.printHeader("Content-Type", "text/html; charset=utf-8");
-            httpresponse.printBody(htmlGenerator.generateHtml("GET", currentGame));
+            httpresponse.printBody(htmlGenerator.generateHtml("GET", currentGame, gameRank));
             emitter.send(httpresponse);
           }
           //New Game creation
@@ -126,16 +127,20 @@ public class Worker extends Thread{
             httpresponse.printHeader("Set-Cookie", cookie.getValue() + "; path=/");
             if(httpreq.getHeader("Accept-Encoding") != null && httpreq.getHeader("Accept-Encoding").contains("gzip"))
               httpresponse.printHeader("Content-Encoding", "gzip");
-            httpresponse.printBody(htmlGenerator.generateHtml("GET", currentGame));
+            httpresponse.printBody(htmlGenerator.generateHtml("GET", currentGame, gameRank));
             emitter.send(httpresponse);
           }
           else
             throw new BattleshipException("400");
         }
         else if(myURL.getPath().equals("/halloffame.html")){
-          httpresponse.printStatus(303);
-          httpresponse.printHeader("Location", "/play.html");
+          gameRank = new Ranking(listOfGames);
+          if(httpreq.getHeader("Accept-Encoding") != null && httpreq.getHeader("Accept-Encoding").contains("gzip"))
+            httpresponse.printHeader("Content-Encoding", "gzip");
+          httpresponse.printHeader("Content-Type", "text/html; charset=utf-8");
+          httpresponse.printBody(htmlGenerator.generateHtml("GET", currentGame, gameRank));
           emitter.send(httpresponse);
+          gameRank = null;
         }
         //Here should be added a new page
         else
@@ -192,7 +197,7 @@ public class Worker extends Thread{
               if(httpreq.getHeader("Accept-Encoding") != null && httpreq.getHeader("Accept-Encoding").contains("gzip"))
                 httpresponse.printHeader("Content-Encoding", "gzip");
               httpresponse.printHeader("Content-Type", "text/html; charset=utf-8");
-              httpresponse.printBody(htmlGenerator.generateHtml("POST", currentGame));
+              httpresponse.printBody(htmlGenerator.generateHtml("POST", currentGame, gameRank));
               emitter.send(httpresponse);
             }
           }
@@ -201,7 +206,7 @@ public class Worker extends Thread{
             if(httpreq.getHeader("Accept-Encoding") != null && httpreq.getHeader("Accept-Encoding").contains("gzip"))
               httpresponse.printHeader("Content-Encoding", "gzip");
             httpresponse.printHeader("Content-Type", "text/html; charset=utf-8");
-            httpresponse.printBody(htmlGenerator.generateHtml("POST", currentGame));
+            httpresponse.printBody(htmlGenerator.generateHtml("POST", currentGame, gameRank));
             emitter.send(httpresponse);
           }
           //New game creation
@@ -211,7 +216,7 @@ public class Worker extends Thread{
             if(httpreq.getHeader("Accept-Encoding") != null && httpreq.getHeader("Accept-Encoding").contains("gzip"))
               httpresponse.printHeader("Content-Encoding", "gzip");
             httpresponse.printHeader("Content-Type", "text/html; charset=utf-8");
-            httpresponse.printBody(htmlGenerator.generateHtml("POST", currentGame));
+            httpresponse.printBody(htmlGenerator.generateHtml("POST", currentGame, gameRank));
             emitter.send(httpresponse);
           }
           else{
@@ -219,11 +224,8 @@ public class Worker extends Thread{
           }
         }
         else if(myURL.getPath().equals("/halloffame.html")){
-          httpresponse.printStatus(303);
-          httpresponse.printHeader("Location", "/play.html");
-          emitter.send(httpresponse);
+          throw new BattleshipException("501");
         }
-        //Here should be added a new page
         else
           throw new BattleshipException("404");
       }

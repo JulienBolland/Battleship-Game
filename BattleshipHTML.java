@@ -25,9 +25,15 @@ class BattleshipHTML{
     im = new BattleshipImages();
   }
 
-  public String generateHtml(String method, Game game){
-      htmlCode = "<html>" + generateHeadHtml() + generateBodyHtml(method, game) + "</html>";
-      return htmlCode;
+  public String generateHtml(String method, Game game, Ranking gameRank){
+    htmlCode = "<html>" + generateHeadHtml();
+    if(gameRank == null)
+      htmlCode += generateBodyHtml(method, game);
+    else
+      htmlCode += generateHofHtml(gameRank);
+
+    htmlCode += "</html>";
+    return htmlCode;
   }
 
   private String generateHeadHtml(){
@@ -59,10 +65,26 @@ class BattleshipHTML{
     }
 
     body = body.concat("</div> </table> </div>\n");
-    body = body.concat("<center> <form action=\"/halloffame.html\" method=\"GET\"><button type=\"inputButton\" value=\"Hall Of Fame\"/> </form> </center>\n");
+    body = body.concat("<center> <form action=\"/halloffame.html\" method=\"GET\"><button type=\"inputButton\"> Hall Of Fame </button></form> </center>\n");
     body = body.concat(generateScript(method));
 
     return body.concat("</body>\n");
+  }
+
+  private String generateHofHtml(Ranking rank){
+    String body = "\n<body background=\"\">\n";
+    body = body.concat("<h1 class=\"h1\"> BATTLESHIP </h1>\n");
+    body = body.concat("<div class=\"focus\">");
+    body = body.concat("<table style=\"width:100%\"><tr><th> </th><th>Cookie Name</th><th>Score</th></tr>");
+    for(int i = 0; i < 10; i++){
+      if(i < rank.size())
+        body = body.concat("<tr><td>"+ (i+1) +".</td><td>"+ rank.getCookie(i).getValue() +"</td><td>"+ rank.getScore(i) +"</td></tr>");
+      else
+        body = body.concat("<tr><td>"+ (i+1) +".</td><td>\\</td><td>\\</td></tr>");
+    }
+    body = body.concat("</table></div>");
+    body = body.concat("<center> <form action=\"/play.html\" method=\"GET\"><button type=\"inputButton\"> Return to the game </button></form> </center>\n");
+    return body;
   }
 
   private String getImage(int j, int i, Game game){
