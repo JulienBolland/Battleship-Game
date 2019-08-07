@@ -38,10 +38,7 @@ class BattleshipHTML{
 
   private String generateHeadHtml(){
     String head = "<head>\n";
-    BattleshipImages im = new BattleshipImages();
-
     head = head.concat("<meta charset=\"utf-8\" http-equiv=\"content-type\" content=\"text/html\"/> <title>Battleship Game</title><style>"+ getFile("style.css") +"</style> \n");
-    head = head.concat("<link rel=\"icon\" type=\"image/png\" href=\"http://example.com/myicon.png\">\n");
     return head.concat("</head>\n");
   }
 
@@ -65,7 +62,7 @@ class BattleshipHTML{
     }
 
     body = body.concat("</div> </table> </div>\n");
-    body = body.concat("<center> <form action=\"/halloffame.html\" method=\"GET\"><button type=\"inputButton\"> Hall Of Fame </button></form> </center>\n");
+    body = body.concat("<center> <form action=\"/halloffame.html\" method=\"GET\"><button type=\"inputButton\"> Hall Of Fame </button></form>\n");
     body = body.concat(generateScript(method));
 
     return body.concat("</body>\n");
@@ -121,7 +118,6 @@ class BattleshipHTML{
     return temp.concat("</select> </center> <center><input type=\"submit\" value=\"Shoot\"></input></center></form></noscript>\n");
 
   }
-
 
   public String getEndPage(String conclusion){
     return "<!DOCTYPE/ html> <html>"+ generateHeadHtml() + "<body> <h1>"+ conclusion + "</h1> </body> </html>";
