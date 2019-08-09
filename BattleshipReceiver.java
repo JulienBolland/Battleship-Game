@@ -15,7 +15,7 @@ class BattleshipReceiver{
     handl = new HttpHandler();
   }
 
-  public String get_Message(/*InputStream inputStream, String charset*/) throws IOException {
+  public String get_Message() throws IOException {
     InputStream inputStream = sock.getInputStream();
   	StringBuilder stringBuilder = new StringBuilder();
   	String line = null;
@@ -26,7 +26,7 @@ class BattleshipReceiver{
     boolean Guardian = true;
 
   	try{
-      BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream/*, charset*/));
+      BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
   		while (Guardian){
         line = bufferedReader.readLine();
   			stringBuilder.append(line + "\r\n");
