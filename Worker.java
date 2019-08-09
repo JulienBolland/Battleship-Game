@@ -271,8 +271,9 @@ public class Worker extends Thread{
     int i;
 
     for(i = 0; i < listOfCookies.size(); i++){
-      if(listOfCookies.get(i).hasExpired()){
+      if(listOfGames.get(i).isFinished())
         gameRank.addGame(listOfGames.get(i));
+      if(listOfCookies.get(i).hasExpired()){
         listOfGames.remove(getGame(listOfCookies.get(i)));
         listOfCookies.remove(i);
       }
@@ -283,8 +284,8 @@ public class Worker extends Thread{
     int i;
 
     for(i = 0; i < listOfCookies.size(); i++){
-      if(listOfCookies.get(i).getValue() == cookie.getValue())
-        listOfCookies.get(i).setMaxAge(0);
+      if(listOfCookies.get(i).getValue() == cookie.getValue()){
+        listOfCookies.get(i).setMaxAge(0);}
     }
   }
 
