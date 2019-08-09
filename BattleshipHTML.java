@@ -27,9 +27,9 @@ class BattleshipHTML{
 
   public String generateHtml(String method, Game game, String currGame, Ranking gameRank)throws BattleshipException{
     htmlCode = "<html>" + generateHeadHtml();
-    if(game.equals("main"))
+    if(currGame.equals("main"))
       htmlCode += generateBodyHtml(method, game);
-    else if(game.equals("hof"))
+    else if(currGame.equals("hof"))
       htmlCode += generateHofHtml(gameRank);
     else
       throw new BattleshipException("400");
