@@ -59,7 +59,7 @@ public class Worker extends Thread{
 
       URL myURL = httpreq.getURL();
       query = httpreq.getQuery();
-      if(query[1].equals("query=")) query = null;
+
 
       //Retrieving the game associated with the cookie if it exists
       String tmp = httpreq.getHeader("Cookie");
