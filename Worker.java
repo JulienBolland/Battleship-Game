@@ -23,10 +23,11 @@ public class Worker extends Thread{
   private HttpHandler httpresponse;
   private HttpHandler httpreq;
   private BattleshipEmitter emitter;
-  private Ranking gameRank = null;
+  private Ranking gameRank;
 
-  public Worker(Socket _sock, ArrayList<Game> list){
+  public Worker(Socket _sock, ArrayList<Game> list, Ranking gameRank){
     try{
+      this.gameRank = gameRank;
       if(listOfCookies == null)
         listOfCookies = new ArrayList<HttpCookie>();
       this.sock = _sock;
@@ -130,7 +131,6 @@ public class Worker extends Thread{
             throw new BattleshipException("400");
         }
         else if(myURL.getPath().equals("/halloffame.html")){
-          gameRank = new Ranking(listOfGames);
           if(httpreq.getHeader("Accept-Encoding") != null && httpreq.getHeader("Accept-Encoding").contains("gzip"))
             httpresponse.printHeader("Content-Encoding", "gzip");
           httpresponse.printHeader("Content-Type", "text/html; charset=utf-8");
@@ -162,7 +162,7 @@ public class Worker extends Thread{
             if(httpreq.getHeader("Accept-Encoding") != null && httpreq.getHeader("Accept-Encoding").contains("gzip"))
               httpresponse.printHeader("Content-Encoding", "gzip");
             httpresponse.printBody(htmlGenerator.getEndPage("You won!"));
-                          removeCookie(cookie);
+            removeCookie(cookie);
             cookie = null;
             emitter.send(httpresponse);
           }
@@ -272,6 +272,7 @@ public class Worker extends Thread{
 
     for(i = 0; i < listOfCookies.size(); i++){
       if(listOfCookies.get(i).hasExpired()){
+        gameRank.addGame(listOfGames.get(i));
         listOfGames.remove(getGame(listOfCookies.get(i)));
         listOfCookies.remove(i);
       }

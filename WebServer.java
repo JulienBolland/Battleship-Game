@@ -19,6 +19,7 @@ class WebServer{
   private static final int DEFAULT_MAX_THREAD = 10;
   private static ExecutorService pool;
   private static ArrayList<Game> listOfGames = new ArrayList<Game>();
+  private static Ranking rank = new Ranking(listOfGames);
 
   public static void main(String args[]){
 
@@ -36,7 +37,7 @@ class WebServer{
 
       //Server waits for a Connection
       while(true){
-        pool.execute(new Worker(ss.accept(), listOfGames));
+        pool.execute(new Worker(ss.accept(), listOfGames, rank));
         System.out.println("Worker created...");
       }
 
