@@ -23,10 +23,11 @@ public class Worker extends Thread{
   private HttpHandler httpresponse;
   private HttpHandler httpreq;
   private BattleshipEmitter emitter;
-  private Ranking gameRank = null;
+  private Ranking gameRank;
 
-  public Worker(Socket _sock, ArrayList<Game> list){
+  public Worker(Socket _sock, ArrayList<Game> list, Ranking gameRank){
     try{
+      this.gameRank = gameRank;
       if(listOfCookies == null)
         listOfCookies = new ArrayList<HttpCookie>();
       this.sock = _sock;
@@ -110,7 +111,7 @@ public class Worker extends Thread{
             if(httpreq.getHeader("Accept-Encoding") != null && httpreq.getHeader("Accept-Encoding").contains("gzip"))
               httpresponse.printHeader("Content-Encoding", "gzip");
             httpresponse.printHeader("Content-Type", "text/html; charset=utf-8");
-            httpresponse.printBody(htmlGenerator.generateHtml("GET", currentGame, gameRank));
+            httpresponse.printBody(htmlGenerator.generateHtml("GET", currentGame, "main", gameRank));
             emitter.send(httpresponse);
           }
           //New Game creation
@@ -123,18 +124,17 @@ public class Worker extends Thread{
             httpresponse.printHeader("Set-Cookie", cookie.getValue() + "; path=/");
             if(httpreq.getHeader("Accept-Encoding") != null && httpreq.getHeader("Accept-Encoding").contains("gzip"))
               httpresponse.printHeader("Content-Encoding", "gzip");
-            httpresponse.printBody(htmlGenerator.generateHtml("GET", currentGame, gameRank));
+            httpresponse.printBody(htmlGenerator.generateHtml("GET", currentGame, "main", gameRank));
             emitter.send(httpresponse);
           }
           else
             throw new BattleshipException("400");
         }
         else if(myURL.getPath().equals("/halloffame.html")){
-          gameRank = new Ranking(listOfGames);
           if(httpreq.getHeader("Accept-Encoding") != null && httpreq.getHeader("Accept-Encoding").contains("gzip"))
             httpresponse.printHeader("Content-Encoding", "gzip");
           httpresponse.printHeader("Content-Type", "text/html; charset=utf-8");
-          httpresponse.printBody(htmlGenerator.generateHtml("GET", currentGame, gameRank));
+          httpresponse.printBody(htmlGenerator.generateHtml("GET", currentGame, "hof", gameRank));
           emitter.send(httpresponse);
           gameRank = null;
         }
@@ -162,7 +162,7 @@ public class Worker extends Thread{
             if(httpreq.getHeader("Accept-Encoding") != null && httpreq.getHeader("Accept-Encoding").contains("gzip"))
               httpresponse.printHeader("Content-Encoding", "gzip");
             httpresponse.printBody(htmlGenerator.getEndPage("You won!"));
-                          removeCookie(cookie);
+            removeCookie(cookie);
             cookie = null;
             emitter.send(httpresponse);
           }
@@ -182,7 +182,7 @@ public class Worker extends Thread{
             if(httpreq.getHeader("Accept-Encoding") != null && httpreq.getHeader("Accept-Encoding").contains("gzip"))
               httpresponse.printHeader("Content-Encoding", "gzip");
             httpresponse.printHeader("Content-Type", "text/html; charset=utf-8");
-            httpresponse.printBody(htmlGenerator.generateHtml("POST", currentGame, gameRank));
+            httpresponse.printBody(htmlGenerator.generateHtml("POST", currentGame, "main", gameRank));
             emitter.send(httpresponse);
           }
         }
@@ -191,7 +191,7 @@ public class Worker extends Thread{
           if(httpreq.getHeader("Accept-Encoding") != null && httpreq.getHeader("Accept-Encoding").contains("gzip"))
             httpresponse.printHeader("Content-Encoding", "gzip");
           httpresponse.printHeader("Content-Type", "text/html; charset=utf-8");
-          httpresponse.printBody(htmlGenerator.generateHtml("POST", currentGame, gameRank));
+          httpresponse.printBody(htmlGenerator.generateHtml("POST", currentGame, "main", gameRank));
           emitter.send(httpresponse);
         }
         //New game creation
@@ -201,7 +201,7 @@ public class Worker extends Thread{
           if(httpreq.getHeader("Accept-Encoding") != null && httpreq.getHeader("Accept-Encoding").contains("gzip"))
             httpresponse.printHeader("Content-Encoding", "gzip");
           httpresponse.printHeader("Content-Type", "text/html; charset=utf-8");
-          httpresponse.printBody(htmlGenerator.generateHtml("POST", currentGame, gameRank));
+          httpresponse.printBody(htmlGenerator.generateHtml("POST", currentGame, "main", gameRank));
           emitter.send(httpresponse);
         }
         else{
@@ -272,6 +272,7 @@ public class Worker extends Thread{
 
     for(i = 0; i < listOfCookies.size(); i++){
       if(listOfCookies.get(i).hasExpired()){
+        gameRank.addGame(listOfGames.get(i));
         listOfGames.remove(getGame(listOfCookies.get(i)));
         listOfCookies.remove(i);
       }
