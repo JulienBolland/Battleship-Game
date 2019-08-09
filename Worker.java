@@ -66,8 +66,6 @@ public class Worker extends Thread{
         currentGame = getGame(cookie);
       }
 
-
-
       //First part, get method
       if(httpreq.getMethod().equals("GET")){
         //Redirection to play.html
@@ -90,7 +88,6 @@ public class Worker extends Thread{
 
             //If the player wins
             if(currentGame.isWin()){
-              listOfGames.remove(currentGame);
               removeCookie(cookie);
               httpresponse.printHeader("Set-Cookie", "SESSID=deleted; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT");
               win = "true";
@@ -98,7 +95,6 @@ public class Worker extends Thread{
             }
             // If the player looses
             if(currentGame.gameOver()){
-              listOfGames.remove(currentGame);
               removeCookie(cookie);
               httpresponse.printHeader("Set-Cookie", "SESSID=deleted; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT");
               gameOver = "true";
@@ -175,8 +171,7 @@ public class Worker extends Thread{
               if(httpreq.getHeader("Accept-Encoding") != null && httpreq.getHeader("Accept-Encoding").contains("gzip"))
                 httpresponse.printHeader("Content-Encoding", "gzip");
               httpresponse.printBody(htmlGenerator.getEndPage("You won!"));
-              listOfGames.remove(currentGame);
-              removeCookie(cookie);
+                            removeCookie(cookie);
               cookie = null;
               emitter.send(httpresponse);
             }
@@ -187,7 +182,6 @@ public class Worker extends Thread{
               if(httpreq.getHeader("Accept-Encoding") != null && httpreq.getHeader("Accept-Encoding").contains("gzip"))
                 httpresponse.printHeader("Content-Encoding", "gzip");
               httpresponse.printBody(htmlGenerator.getEndPage("You lost!"));
-              listOfGames.remove(currentGame);
               removeCookie(cookie);
               cookie = null;
               emitter.send(httpresponse);
@@ -263,7 +257,6 @@ public class Worker extends Thread{
     HttpCookie cookie = null;
     Game currentGame = null;
     synchronized(listOfGames){
-      listOfGames.remove(currentGame);
       cookie = new HttpCookie("SESSID", Integer.toString(listOfGames.size()));
       // We set the timelife of the cookie
       cookie.setMaxAge(600);

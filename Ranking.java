@@ -19,8 +19,12 @@ public class Ranking{
 
   // Constructor
   public Ranking(ArrayList<Game> listOfGames){
-    for(int i = 0; i < listOfGames.size(); i++)
-      addGame(listOfGames.get(i));
+    for(int i = 0; i < listOfGames.size(); i++){
+      //In order to avoid diplaying games not finished yet
+      Game curr = listOfGames.get(i);
+      if(curr.isFinished())
+        addGame(curr);
+    }
   }
 
   // This method allows to add a game to the ranking.

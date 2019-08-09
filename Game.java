@@ -70,6 +70,10 @@ public class Game{
 		return win;
 	}
 
+	public boolean isFinished(){
+		return this.isWin() || this.gameOver();
+	}
+
 	public int getNbAttempt(){
 		return nbAttempt;
 	}
