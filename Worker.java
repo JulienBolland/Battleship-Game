@@ -138,92 +138,76 @@ public class Worker extends Thread{
           emitter.send(httpresponse);
           gameRank = null;
         }
-        //Here should be added a new page
         else
           throw new BattleshipException("404");
       }
 
 
       //Second part: Post method
+      //Only used when javascript is unenabled in play.html
       else if(httpreq.getMethod().equals("POST")){
-        //Redirection to play.html
-        if(myURL.getPath().equals("/")){
-          httpresponse.printStatus(303);
-          httpresponse.printHeader("Location", "/play.html");
-          emitter.send(httpresponse);
-        }
+        if(currentGame != null && query != null && queryCheck(query)){
+          //Collecting the attempt
+          int[] attempt = new int[2] ;
+          attempt[0] = Integer.parseInt(query.get(0)[1]);
+          attempt[1] = Integer.parseInt(query.get(1)[1]);
 
+          //Checking whether a ship has been touched
+          currentGame.checkAttempt(attempt[0], attempt[1]);
 
-        if(myURL.getPath().equals("/play.html")){
-          if(currentGame != null && query != null && queryCheck(query)){
-            //Collecting the attempt
-            int[] attempt = new int[2] ;
-            attempt[0] = Integer.parseInt(query.get(0)[1]);
-            attempt[1] = Integer.parseInt(query.get(1)[1]);
-
-            //Checking whether a ship has been touched
-            currentGame.checkAttempt(attempt[0], attempt[1]);
-
-            //If the player won the game
-            if(currentGame.isWin()){
-              httpresponse.printHeader("Set-Cookie", "SESSID=deleted; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT");
-              httpresponse.printHeader("Content-Type", "text/html; charset=utf-8");
-              if(httpreq.getHeader("Accept-Encoding") != null && httpreq.getHeader("Accept-Encoding").contains("gzip"))
-                httpresponse.printHeader("Content-Encoding", "gzip");
-              httpresponse.printBody(htmlGenerator.getEndPage("You won!"));
-                            removeCookie(cookie);
-              cookie = null;
-              emitter.send(httpresponse);
-            }
-            //If the player lost
-            else if(currentGame.gameOver()){
-              httpresponse.printHeader("Set-Cookie", "SESSID=deleted; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT");
-              httpresponse.printHeader("Content-Type", "text/html; charset=utf-8");
-              if(httpreq.getHeader("Accept-Encoding") != null && httpreq.getHeader("Accept-Encoding").contains("gzip"))
-                httpresponse.printHeader("Content-Encoding", "gzip");
-              httpresponse.printBody(htmlGenerator.getEndPage("You lost!"));
-              removeCookie(cookie);
-              cookie = null;
-              emitter.send(httpresponse);
-            }
-            //Page actualisation
-            else{
-              if(httpreq.getHeader("Accept-Encoding") != null && httpreq.getHeader("Accept-Encoding").contains("gzip"))
-                httpresponse.printHeader("Content-Encoding", "gzip");
-              httpresponse.printHeader("Content-Type", "text/html; charset=utf-8");
-              httpresponse.printBody(htmlGenerator.generateHtml("POST", currentGame, gameRank));
-              emitter.send(httpresponse);
-            }
+          //If the player won the game
+          if(currentGame.isWin()){
+            httpresponse.printHeader("Set-Cookie", "SESSID=deleted; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT");
+            httpresponse.printHeader("Content-Type", "text/html; charset=utf-8");
+            if(httpreq.getHeader("Accept-Encoding") != null && httpreq.getHeader("Accept-Encoding").contains("gzip"))
+              httpresponse.printHeader("Content-Encoding", "gzip");
+            httpresponse.printBody(htmlGenerator.getEndPage("You won!"));
+                          removeCookie(cookie);
+            cookie = null;
+            emitter.send(httpresponse);
+          }
+          //If the player lost
+          else if(currentGame.gameOver()){
+            httpresponse.printHeader("Set-Cookie", "SESSID=deleted; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT");
+            httpresponse.printHeader("Content-Type", "text/html; charset=utf-8");
+            if(httpreq.getHeader("Accept-Encoding") != null && httpreq.getHeader("Accept-Encoding").contains("gzip"))
+              httpresponse.printHeader("Content-Encoding", "gzip");
+            httpresponse.printBody(htmlGenerator.getEndPage("You lost!"));
+            removeCookie(cookie);
+            cookie = null;
+            emitter.send(httpresponse);
           }
           //Page actualisation
-          else if(currentGame != null && query == null){
-            if(httpreq.getHeader("Accept-Encoding") != null && httpreq.getHeader("Accept-Encoding").contains("gzip"))
-              httpresponse.printHeader("Content-Encoding", "gzip");
-            httpresponse.printHeader("Content-Type", "text/html; charset=utf-8");
-            httpresponse.printBody(htmlGenerator.generateHtml("POST", currentGame, gameRank));
-            emitter.send(httpresponse);
-          }
-          //New game creation
-          else if(currentGame == null && query == null){
-            cookie = newCookie();
-            currentGame = getGame(cookie);
-            if(httpreq.getHeader("Accept-Encoding") != null && httpreq.getHeader("Accept-Encoding").contains("gzip"))
-              httpresponse.printHeader("Content-Encoding", "gzip");
-            httpresponse.printHeader("Content-Type", "text/html; charset=utf-8");
-            httpresponse.printBody(htmlGenerator.generateHtml("POST", currentGame, gameRank));
-            emitter.send(httpresponse);
-          }
           else{
-            throw new BattleshipException("400");
+            if(httpreq.getHeader("Accept-Encoding") != null && httpreq.getHeader("Accept-Encoding").contains("gzip"))
+              httpresponse.printHeader("Content-Encoding", "gzip");
+            httpresponse.printHeader("Content-Type", "text/html; charset=utf-8");
+            httpresponse.printBody(htmlGenerator.generateHtml("POST", currentGame, gameRank));
+            emitter.send(httpresponse);
           }
         }
-        else if(myURL.getPath().equals("/halloffame.html")){
-          throw new BattleshipException("501");
+        //Page actualisation
+        else if(currentGame != null && query == null){
+          if(httpreq.getHeader("Accept-Encoding") != null && httpreq.getHeader("Accept-Encoding").contains("gzip"))
+            httpresponse.printHeader("Content-Encoding", "gzip");
+          httpresponse.printHeader("Content-Type", "text/html; charset=utf-8");
+          httpresponse.printBody(htmlGenerator.generateHtml("POST", currentGame, gameRank));
+          emitter.send(httpresponse);
         }
-        else
-          throw new BattleshipException("404");
+        //New game creation
+        else if(currentGame == null && query == null){
+          cookie = newCookie();
+          currentGame = getGame(cookie);
+          if(httpreq.getHeader("Accept-Encoding") != null && httpreq.getHeader("Accept-Encoding").contains("gzip"))
+            httpresponse.printHeader("Content-Encoding", "gzip");
+          httpresponse.printHeader("Content-Type", "text/html; charset=utf-8");
+          httpresponse.printBody(htmlGenerator.generateHtml("POST", currentGame, gameRank));
+          emitter.send(httpresponse);
+        }
+        else{
+          throw new BattleshipException("400");
+        }
       }
-
       //If the method is neither GET nor POST
       else
         throw new BattleshipException("501");
