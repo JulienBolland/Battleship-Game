@@ -1,5 +1,5 @@
 # Battleship Game
-This project is made as part of the course INFO0010-4 at the Uliège. In association with Thomas Mazur.
+This project is made as part of the course INFO0010-4 at the Uliège. The server uses the HTTP protocol to provide an interactive Battleship game to its clients. In association with Thomas Mazur (https://github.com/ThMazur).
 
 # Run
 To run the project, type on a terminal opened at the location of the files : 
