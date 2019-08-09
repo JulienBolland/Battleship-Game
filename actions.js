@@ -51,9 +51,11 @@ function tileReact(tile){
         }
   			if(trua.localeCompare(result.win) == 0){
   				alert('You won');
+          document.cookie = xhttp.getResponseHeader("Set-Cookie");
   			}
   			if(trua.localeCompare(result.gameOver) == 0){
   				alert('Game over');
+          document.cookie = xhttp.getResponseHeader("Set-Cookie");
   			}
   		}
   	};
