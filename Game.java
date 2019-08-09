@@ -63,7 +63,7 @@ public class Game{
 	}
 
 	public boolean gameOver(){
-		return nbAttempt == 70;
+		return nbAttempt >= 70;
 	}
 
 	public boolean isWin(){
