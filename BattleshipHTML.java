@@ -25,12 +25,14 @@ class BattleshipHTML{
     im = new BattleshipImages();
   }
 
-  public String generateHtml(String method, Game game, Ranking gameRank){
+  public String generateHtml(String method, Game game, String game, Ranking gameRank)throws BattleshipException{
     htmlCode = "<html>" + generateHeadHtml();
-    if(gameRank == null)
+    if(game.equals("main"))
       htmlCode += generateBodyHtml(method, game);
-    else
+    else if(game.equals("hof"))
       htmlCode += generateHofHtml(gameRank);
+    else
+      throw new BattleshipException("400");
 
     htmlCode += "</html>";
     return htmlCode;

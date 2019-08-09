@@ -110,7 +110,7 @@ public class Worker extends Thread{
             if(httpreq.getHeader("Accept-Encoding") != null && httpreq.getHeader("Accept-Encoding").contains("gzip"))
               httpresponse.printHeader("Content-Encoding", "gzip");
             httpresponse.printHeader("Content-Type", "text/html; charset=utf-8");
-            httpresponse.printBody(htmlGenerator.generateHtml("GET", currentGame, gameRank));
+            httpresponse.printBody(htmlGenerator.generateHtml("GET", currentGame, "main", gameRank));
             emitter.send(httpresponse);
           }
           //New Game creation
@@ -123,7 +123,7 @@ public class Worker extends Thread{
             httpresponse.printHeader("Set-Cookie", cookie.getValue() + "; path=/");
             if(httpreq.getHeader("Accept-Encoding") != null && httpreq.getHeader("Accept-Encoding").contains("gzip"))
               httpresponse.printHeader("Content-Encoding", "gzip");
-            httpresponse.printBody(htmlGenerator.generateHtml("GET", currentGame, gameRank));
+            httpresponse.printBody(htmlGenerator.generateHtml("GET", currentGame, "main", gameRank));
             emitter.send(httpresponse);
           }
           else
@@ -134,7 +134,7 @@ public class Worker extends Thread{
           if(httpreq.getHeader("Accept-Encoding") != null && httpreq.getHeader("Accept-Encoding").contains("gzip"))
             httpresponse.printHeader("Content-Encoding", "gzip");
           httpresponse.printHeader("Content-Type", "text/html; charset=utf-8");
-          httpresponse.printBody(htmlGenerator.generateHtml("GET", currentGame, gameRank));
+          httpresponse.printBody(htmlGenerator.generateHtml("GET", currentGame, "hof", gameRank));
           emitter.send(httpresponse);
           gameRank = null;
         }
@@ -182,7 +182,7 @@ public class Worker extends Thread{
             if(httpreq.getHeader("Accept-Encoding") != null && httpreq.getHeader("Accept-Encoding").contains("gzip"))
               httpresponse.printHeader("Content-Encoding", "gzip");
             httpresponse.printHeader("Content-Type", "text/html; charset=utf-8");
-            httpresponse.printBody(htmlGenerator.generateHtml("POST", currentGame, gameRank));
+            httpresponse.printBody(htmlGenerator.generateHtml("POST", currentGame, "main", gameRank));
             emitter.send(httpresponse);
           }
         }
@@ -191,7 +191,7 @@ public class Worker extends Thread{
           if(httpreq.getHeader("Accept-Encoding") != null && httpreq.getHeader("Accept-Encoding").contains("gzip"))
             httpresponse.printHeader("Content-Encoding", "gzip");
           httpresponse.printHeader("Content-Type", "text/html; charset=utf-8");
-          httpresponse.printBody(htmlGenerator.generateHtml("POST", currentGame, gameRank));
+          httpresponse.printBody(htmlGenerator.generateHtml("POST", currentGame, "main", gameRank));
           emitter.send(httpresponse);
         }
         //New game creation
@@ -201,7 +201,7 @@ public class Worker extends Thread{
           if(httpreq.getHeader("Accept-Encoding") != null && httpreq.getHeader("Accept-Encoding").contains("gzip"))
             httpresponse.printHeader("Content-Encoding", "gzip");
           httpresponse.printHeader("Content-Type", "text/html; charset=utf-8");
-          httpresponse.printBody(htmlGenerator.generateHtml("POST", currentGame, gameRank));
+          httpresponse.printBody(htmlGenerator.generateHtml("POST", currentGame, "main", gameRank));
           emitter.send(httpresponse);
         }
         else{
