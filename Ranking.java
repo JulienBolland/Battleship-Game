@@ -32,7 +32,7 @@ public class Ranking{
   // than we do not add it. A sorting of the list takes place
   // in order to classify the players according to their scores.
   // ARGUMENTS : currGame => the game we want to add in the ranking
-  private void addGame(Game currGame){
+  public void addGame(Game currGame){
     HallOfFame newGame = new HallOfFame(currGame);
     // If the list of players if lower than 10, we add it automatically
     if(hof.size() < 10){
