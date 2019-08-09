@@ -284,7 +284,7 @@ public class Worker extends Thread{
 
     for(i = 0; i < listOfCookies.size(); i++){
       if(listOfCookies.get(i).getValue() == cookie.getValue())
-        listOfCookies.get(i).setMaxAge(0);;
+        listOfCookies.get(i).setMaxAge(0);
     }
   }
 
