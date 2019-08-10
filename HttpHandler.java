@@ -189,7 +189,7 @@ class HttpHandler{
         i = headers.size() + 1;
       }
     }
-    if(i == headers.size())
+    if(i == headers.size()){}
       // No headers found, we remove nothing
   }
 
