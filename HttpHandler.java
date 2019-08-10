@@ -190,7 +190,7 @@ class HttpHandler{
       }
     }
     if(i == headers.size())
-      e.printStackTrace();
+      // No headers found, we remove nothing
   }
 
   /*printBody, modifies the body of the Http request*/
