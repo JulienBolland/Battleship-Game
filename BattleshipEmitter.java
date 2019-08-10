@@ -1,16 +1,18 @@
-/* This class emits messages on the OutputStream and compress them.
-
-  - CONSTRUCTOR : BattleshipEmitter(PrintWriter d_out);
-  - METHODS : void sendMessage(HttpHandler handl);
-              private void compress(); à refaire totalement
-              private void chunkedEncode(); à refaire totalement
-*/
+/************************************************
+* Introduction to computer networking : Project 2
+*
+* Authors : Julien Bolland : s161622 @ULiège
+*           Thomas Mazur : s162939 @ULiège
+*
+* All rights reserved.
+************************************************/
 import java.net.*;
 import java.lang.*;
 import java.io.*;
 import java.awt.*;
 import java.util.*;
 
+// This class emits messages on the OutputStream and compress them.
 class BattleshipEmitter{
 
   private Socket sock;
@@ -47,11 +49,9 @@ class BattleshipEmitter{
       }
       // Flushing
       serverOut.flush();
-      System.out.println("\n\nResponse:");
-      System.out.println(new String(msg[0]));
     }
     catch(IOException e){
-      System.out.println(e.getMessage());
+      e.printStackTrace();
     }
   }
 

@@ -37,7 +37,7 @@ public class Worker extends Thread{
       emitter = new BattleshipEmitter(sock);
     }
     catch(IOException e){
-      System.out.println("Error during the creation of the worker: "+e.getMessage());
+      e.printStackTrace();
     }
   }
   @Override
@@ -222,22 +222,21 @@ public class Worker extends Thread{
       emitter.send(e.getErrorMessage());
     }
     catch(SocketException e){
-			System.err.println(e.getMessage());
+			e.printStackTrace();
 		}
 		catch(SocketTimeoutException e){
-      System.err.println(e.getMessage());
+      e.printStackTrace();
     }
 		catch(IOException e){
-      System.err.println(e.getMessage());
+      e.printStackTrace();
     }
     finally{
       //Close the socket and the server.
-      System.out.println("\nFinished treating request, closing connection");
       try{
         sock.close();
       }
       catch(IOException e){
-        System.err.println(e.getMessage());
+        e.printStackTrace();
       }
     }
   }
@@ -261,7 +260,6 @@ public class Worker extends Thread{
     for(int i = 0; i < listOfGames.size(); i++){
       if(listOfGames.get(i).getCookie().getValue().equals(cookie.getValue())){
         currentGame = listOfGames.get(i);
-        currentGame.justDisplay();
         return currentGame;
       }
     }

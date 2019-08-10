@@ -46,7 +46,7 @@ class HttpHandler{
         _Url = new URL(new URL("http://localhost:8018"), method[1].split(" ")[0]);
     }
     catch(MalformedURLException e){
-      System.err.print("Error during the creation of the URL.");
+      e.printStackTrace();
     }
   }
 
@@ -70,7 +70,7 @@ class HttpHandler{
     state = true;
   }
 
-  /*Displays the http request.*/
+  /*Displays the http request for debuging*/
   public void displayHttp(){
 
     SimpleDateFormat dateForm = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss z");
@@ -113,7 +113,7 @@ class HttpHandler{
         body = headbody[1];
       }
       catch(Exception e){
-        System.err.println("Error : " + e.getMessage());
+        e.printStackTrace();
       }
   }
 
@@ -190,7 +190,7 @@ class HttpHandler{
       }
     }
     if(i == headers.size())
-      System.out.println("No such header found. Proceed..");
+      e.printStackTrace();
   }
 
   /*printBody, modifies the body of the Http request*/
@@ -215,7 +215,7 @@ class HttpHandler{
       method[1] = "/" + content + " HTTP/1.1";
     }
     catch(MalformedURLException e){
-      System.err.print("Error during the creation of the URL.");
+      e.printStackTrace();
     }
     if(state)
       method[0] = "";
@@ -313,7 +313,7 @@ class HttpHandler{
       gzipos.close();
     }
     catch(IOException e){
-      System.err.println(e.getMessage());
+      e.printStackTrace();
     }
   }
 

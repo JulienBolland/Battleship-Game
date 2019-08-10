@@ -23,13 +23,13 @@ public class Battlefield {
   // Constructor
   public Battlefield(boolean isNewGame){
     battlefield = new Battleship[10][10];
-
+    //Allocating the tiles
     for(int i = 0; i < 10; i++){
       for(int j = 0; j < 10; j++){
         battlefield[i][j] = new Battleship(type[0]);
       }
     }
-
+    //Creates a new game
     if(isNewGame){
       for(int i = 0; i < 5; i++)
         while(!posAcceptation(battlefield, type[i+1]));
@@ -106,19 +106,6 @@ public class Battlefield {
       battlefield[x][y].setTouched();
       if(battlefield[x][y].getType() != "water")
         ships--;
-    }
-  }
-
-  public void display(){
-    int i, j;
-    for(i = 0; i < 10; i++){
-      for(j = 0; j < 10; j++){
-        if(battlefield[j][i].getType().equals("water"))
-          System.out.print(" o ");
-        else
-          System.out.print(" x ");
-      }
-        System.out.println("");
     }
   }
 

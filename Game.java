@@ -49,37 +49,41 @@ public class Game{
     return false;
 	}
 
+	// Returns the tile with the coordinates (x,y)
   public String getTile(int x, int y){
     Battleship ship = secretBF.getShip(x, y);
     return ship.getType();
   }
 
+	// Returns the entire battlefield.
   public Battlefield getBattlefield(){
     return secretBF;
   }
 
+	// Returns the cookie used for this game
 	public HttpCookie getCookie(){
 		return cookie;
 	}
 
+	// Returns a boolean that states if we have lost
 	public boolean gameOver(){
 		return nbAttempt >= 70;
 	}
 
+	// Returns a boolean that states if we have won
 	public boolean isWin(){
 		return win;
 	}
 
+	// Returns a boolean that states if the game is finished
+	// (lost or won)
 	public boolean isFinished(){
 		return this.isWin() || this.gameOver();
 	}
 
+	// Returns the number of attempts during this game
 	public int getNbAttempt(){
 		return nbAttempt;
-	}
-
-	public void justDisplay(){
-		secretBF.display();
 	}
 
 }

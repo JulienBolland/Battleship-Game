@@ -24,7 +24,6 @@ class WebServer{
   public static void main(String args[]){
 
     try{
-      System.out.print("Openning server on port 8018...\n");
       int maxThread = DEFAULT_MAX_THREAD;
       if(args.length == 1)
         maxThread = Integer.parseInt(args[0]);
@@ -38,11 +37,14 @@ class WebServer{
       //Server waits for a Connection
       while(true){
         pool.execute(new Worker(ss.accept(), listOfGames, rank));
-        System.out.println("Worker created...");
       }
 
     }
-    catch(IllegalArgumentException e){System.err.println(e.getMessage());}
-    catch(IOException ex){pool.shutdown();}
+    catch(IllegalArgumentException e){
+      e.printStackTrace();
+    }
+    catch(IOException ex){
+      pool.shutdown();
+    }
   }
 }

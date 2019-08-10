@@ -1,3 +1,11 @@
+/************************************************
+* Introduction to computer networking : Project 2
+*
+* Authors : Julien Bolland : s161622 @ULiège
+*           Thomas Mazur : s162939 @ULiège
+*
+* All rights reserved.
+************************************************/
 import java.lang.*;
 import java.io.*;
 import java.awt.image.*;
