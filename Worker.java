@@ -290,7 +290,7 @@ public class Worker extends Thread{
   private void removeCookie(HttpCookie cookie){
     int i;
 
-    synchronized{
+    synchronized(listOfCookies){
       for(i = 0; i < listOfCookies.size(); i++){
         if(listOfCookies.get(i).getValue() == cookie.getValue()){
           listOfCookies.get(i).setMaxAge(0);}

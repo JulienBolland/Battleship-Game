@@ -160,6 +160,8 @@ class HttpHandler{
     //If the query is invalid or empty the content is returned
     else if(!query.contains("=")){
        parsedquery.add(new String[] {"query=", query});
+       if(parsedquery.get(0)[1].equals(""))
+        parsedquery = null;
       return parsedquery;
     }
 
