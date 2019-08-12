@@ -106,7 +106,7 @@ public class Worker extends Thread{
             }
             httpresponse.printHeader("Content-Type", "JSON");
             httpresponse.printHeader("No Chunk", "Full");
-            httpresponse.printBody("{ \"win\":\""+win+"\", \"gameOver\":\""+gameOver+"\", \"hit\":"+hit+"}");
+            httpresponse.printBody("{\"win\":\""+win+"\", \"gameOver\":\""+gameOver+"\", \"hit\":\""+hit+"\"}\n");
             emitter.send(httpresponse);
           }
           //Page actualisation

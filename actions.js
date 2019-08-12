@@ -16,17 +16,23 @@ for(var i = 0; i < 10; i++){
       str = num.toString(10);
 
     var fun = funx(Number(str));
-    document.getElementById(str).addEventListener("click", fun);
+    if(document.getElementById(str) != null)
+      document.getElementById(str).addEventListener("click", fun);
   }
 }
 
-function funx(oui){
-  return function t(){tileReact(oui);};
+function funx(id){
+  return function t(){tileReact(id);};
 }
 
 function tileReact(tile){
   if(tile != null){
     var col, line;
+    var id;
+    if(tile < 10)
+      id = "0"+tile.toString(10);
+    else
+      id = tile.toString(10);
     col = tile%10;
     line = (tile - col)/10;
     var xhttp = new XMLHttpRequest();
@@ -36,13 +42,8 @@ function tileReact(tile){
     xhttp.onreadystatechange = function(){
   		if (xhttp.readyState === XMLHttpRequest.DONE && xhttp.status === 200) {
   			var result = JSON.parse(xhttp.responseText);
-        var id;
         var trua = "true";
         var falsa = "false";
-        if(tile < 10)
-          id = "0"+tile.toString(10);
-        else
-          id = tile.toString(10);
         if(trua.localeCompare(result.hit) == 0){
           document.getElementById(id).innerHTML = "<img src=\"data:image/png;base64, "+ boom +"\" width=\"100%\" />";
         }
@@ -59,6 +60,7 @@ function tileReact(tile){
   			}
   		}
   	};
-    xhttp.send();
+    if(!document.getElementById(id).innerHTML.includes(plouf) &&  !document.getElementById(id).innerHTML.includes(boom))
+      xhttp.send();
   }
 }
