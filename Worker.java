@@ -241,6 +241,7 @@ public class Worker extends Thread{
     }
   }
 
+  //Method that creates a nex cookie and associates it to a new game on the game list
   private HttpCookie newCookie(){
     HttpCookie cookie = null;
     Game currentGame = null;
@@ -255,6 +256,8 @@ public class Worker extends Thread{
 
   }
 
+  //Given a cookie, this method will return the game in the list of game associated
+  //with this cookie (if it exists).
   private Game getGame(HttpCookie cookie){
     Game currentGame;
     for(int i = 0; i < listOfGames.size(); i++){
@@ -266,10 +269,12 @@ public class Worker extends Thread{
     return null;
   }
 
+  //Method that checks if the query matches the battleship game format
   private boolean queryCheck(ArrayList<String[]> query){
     return query.size() == 2 && query.get(0)[0].equals("x") && query.get(1)[0].equals("y");
   }
 
+  //MAthod that reviews the whole list of cookie to remove expired ones and their associated game
   private void purgeCookie(){
     int i;
 
@@ -281,12 +286,15 @@ public class Worker extends Thread{
     }
   }
 
+  //Method that delete a cookie from the list
   private void removeCookie(HttpCookie cookie){
     int i;
 
-    for(i = 0; i < listOfCookies.size(); i++){
-      if(listOfCookies.get(i).getValue() == cookie.getValue()){
-        listOfCookies.get(i).setMaxAge(0);}
+    synchronized{
+      for(i = 0; i < listOfCookies.size(); i++){
+        if(listOfCookies.get(i).getValue() == cookie.getValue()){
+          listOfCookies.get(i).setMaxAge(0);}
+      }
     }
   }
 

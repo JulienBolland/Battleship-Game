@@ -16,6 +16,7 @@ import java.util.*;
 class BattleshipEmitter{
 
   private Socket sock;
+  //Chunk size is arbitrary FFF
   static int CHUNKSIZE = 4095;
 
   //Constructor
@@ -44,8 +45,6 @@ class BattleshipEmitter{
         serverOut.write(msg[1]);
       else if(response.getHeader("Transfer-Encoding").contains("chunked")){
         chunckedEncoding(charset, msg[1]);
-        serverOut.write(Integer.toHexString(0).getBytes(charset));
-        serverOut.write("\r\n\r\n".getBytes(charset));
       }
       // Flushing
       serverOut.flush();
@@ -62,6 +61,7 @@ class BattleshipEmitter{
     int i = 0;
     try{
       OutputStream sout = sock.getOutputStream();
+      //While the body is greater than chunksize, we send full chunksize chunks
       while(body.length >= CHUNKSIZE * (i + 1)){
         sout.write(Integer.toHexString(CHUNKSIZE).getBytes(charset));
         sout.write("\r\n".getBytes(charset));
@@ -70,6 +70,7 @@ class BattleshipEmitter{
         sout.flush();
         i++;
       }
+      //When the body is shorter than the chunksize, we send the remaining data
       if(body.length - i * CHUNKSIZE > 0){
         sout.write(Integer.toHexString(body.length - i * CHUNKSIZE).getBytes(charset));
         sout.write("\r\n".getBytes(charset));
@@ -77,6 +78,9 @@ class BattleshipEmitter{
         sout.flush();
         sout.write("\r\n".getBytes(charset));
       }
+      //then we send the last empty chunk
+      sout.write(Integer.toHexString(0).getBytes(charset));
+      sout.write("\r\n\r\n".getBytes(charset));
     }
     catch(IOException e){
       System.err.print(e.getMessage());

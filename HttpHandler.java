@@ -142,18 +142,22 @@ class HttpHandler{
     return body;
   }
 
+  //Returns the query of the http message
   public ArrayList<String[]> getQuery(){
 
     ArrayList<String[]> parsedquery = new ArrayList<String[]>();
     String query = null;
     String[] temp;
 
+    //If the method is get, the query is in the url
     if(method[0].equals("GET"))
       query = _Url.getQuery();
+    //If the method is post, the query is the body
     if(method[0].equals("POST"))
       query = body;
     if(query == null)
       return null;
+    //If the query is invalid or empty the content is returned
     else if(!query.contains("=")){
        parsedquery.add(new String[] {"query=", query});
       return parsedquery;

@@ -24,6 +24,7 @@ class WebServer{
   public static void main(String args[]){
 
     try{
+      //Check whether the user gave the correct amount of argument
       int maxThread = DEFAULT_MAX_THREAD;
       if(args.length == 1)
         maxThread = Integer.parseInt(args[0]);
