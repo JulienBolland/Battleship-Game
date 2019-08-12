@@ -60,7 +60,6 @@ class BattleshipHTML{
     int i = 0, j;
     //The title of the page is appended
     body = body.concat("<h1 class=\"h1\"> BATTLESHIP </h1>\n");
-    body = body.concat(generateScript(method));
     //The grid in which the tiles will be displayed
     body = body.concat("<div class=\"focus\"> <table id=\"gameTable\"> <div>\n");
     body = body.concat("<tr><td class=\"td\"></td>\n");
@@ -75,6 +74,7 @@ class BattleshipHTML{
       body = body.concat("</tr>\n");
     }
     body = body.concat("</div> </table> </div>\n");
+    body = body.concat(generateScript(method));
     // The button to access halloffame.html
     body = body.concat("<center> <form action=\"/halloffame.html\" method=\"GET\"><button type=\"inputButton\"> Hall Of Fame </button></form>\n");
     return body.concat("</body>\n");
