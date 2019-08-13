@@ -153,6 +153,10 @@ public class Worker extends Thread{
       //Only used when javascript is unenabled in play.html
       else if(httpreq.getMethod().equals("POST")){
         if(currentGame != null && query != null && queryCheck(query)){
+          //Check if the header Content-Length is used
+          if(httpreq.getHeader("Content-Length") == null){
+            throw new BattleshipException("411");
+          }
           //Collecting the attempt
           int[] attempt = new int[2] ;
           attempt[0] = Integer.parseInt(query.get(0)[1]);
