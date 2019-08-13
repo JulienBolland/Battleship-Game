@@ -301,11 +301,12 @@ public class Worker extends Thread{
   //Method that delete a cookie from the list
   private void removeCookie(HttpCookie cookie){
     int i;
-
-    synchronized(listOfCookies){
-      for(i = 0; i < listOfCookies.size(); i++){
-        if(listOfCookies.get(i).getValue() == cookie.getValue()){
-          listOfCookies.get(i).setMaxAge(0);}
+    if(cookie != null){
+      synchronized(listOfCookies){
+        for(i = 0; i < listOfCookies.size(); i++){
+          if(listOfCookies.get(i).getValue() == cookie.getValue()){
+            listOfCookies.get(i).setMaxAge(0);}
+        }
       }
     }
   }
