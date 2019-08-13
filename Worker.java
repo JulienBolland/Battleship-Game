@@ -57,6 +57,9 @@ public class Worker extends Thread{
       //Parsing of the received message and initialization of response.
       httpreq = new HttpHandler(msgrecept.get_Message());
 
+      if(!httpreq.getVersion().equals("HTTP/1.0") && !httpreq.getVersion().equals("HTTP/1.1"))
+        throw new BattleshipException("505");
+
       URL myURL = httpreq.getURL();
       query = httpreq.getQuery();
 
@@ -213,7 +216,10 @@ public class Worker extends Thread{
           throw new BattleshipException("400");
         }
       }
-      //If the method is neither GET nor POST
+      //If the method is not implented
+      else if(httpreq.getMethod().equals("PUT") || httpreq.getMethod().equals("DELETE") || httpreq.getMethod().equals("PATCH"))
+        throw new BattleshipException("405");
+      //If the method is unrecognized
       else
         throw new BattleshipException("501");
 

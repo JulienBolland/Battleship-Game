@@ -142,6 +142,15 @@ class HttpHandler{
     return body;
   }
 
+  public String getVersion(){
+    if(method[1].contains("HTTP/1.0"))
+      return "HTTP/1.0";
+    else if(method[1].contains("HTTP/1.1"))
+      return "HTTP/1.1";
+    else
+      return null;
+  }
+
   //Returns the query of the http message
   public ArrayList<String[]> getQuery(){
 
