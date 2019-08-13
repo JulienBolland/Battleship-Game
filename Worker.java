@@ -94,7 +94,9 @@ public class Worker extends Thread{
             //If the player wins
             if(currentGame.isWin()){
               removeCookie(cookie);
-              gameRank.addGame(currentGame);
+              synchronized{
+                gameRank.addGame(currentGame);
+              }
               httpresponse.printHeader("Set-Cookie", "SESSID=deleted; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT");
               win = "true";
               cookie = null;
@@ -102,7 +104,9 @@ public class Worker extends Thread{
             // If the player looses
             if(currentGame.gameOver()){
               removeCookie(cookie);
-              gameRank.addGame(currentGame);
+              synchronized{
+                gameRank.addGame(currentGame);
+              }
               httpresponse.printHeader("Set-Cookie", "SESSID=deleted; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT");
               gameOver = "true";
               cookie = null;
@@ -173,7 +177,9 @@ public class Worker extends Thread{
               httpresponse.printHeader("Content-Encoding", "gzip");
             httpresponse.printBody(htmlGenerator.getEndPage("You won!"));
             removeCookie(cookie);
-            gameRank.addGame(currentGame);
+            synchronized{
+              gameRank.addGame(currentGame);
+            }
             cookie = null;
             emitter.send(httpresponse);
           }
@@ -185,7 +191,9 @@ public class Worker extends Thread{
               httpresponse.printHeader("Content-Encoding", "gzip");
             httpresponse.printBody(htmlGenerator.getEndPage("You lost!"));
             removeCookie(cookie);
-            gameRank.addGame(currentGame);
+            synchronized{
+              gameRank.addGame(currentGame);
+            }
             cookie = null;
             emitter.send(httpresponse);
           }
