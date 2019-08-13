@@ -48,8 +48,6 @@ class BattleshipEmitter{
       }
       // Flushing
       serverOut.flush();
-      System.out.println("\n\nResponse:");
-      System.out.println(new String(msg[0]));
     }
     catch(IOException e){
       e.printStackTrace();
