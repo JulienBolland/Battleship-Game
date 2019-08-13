@@ -65,7 +65,7 @@ public class Worker extends Thread{
 
 
       //Retrieving the game associated with the cookie if it exists
-      String tmp = httpreq.getHeader("Cookie");
+      String tmp = httpreq.getCookie("SESSID");
       if(tmp  != null){
         cookie = new HttpCookie("SESSID", tmp);
         currentGame = getGame(cookie);
@@ -129,7 +129,7 @@ public class Worker extends Thread{
 
             //Construction of the response
             cookie.getValue();
-            httpresponse.printHeader("Set-Cookie", cookie.getValue() + "; path=/");
+            httpresponse.printHeader("Set-Cookie", cookie.getName() + "=" + cookie.getValue() + "; path=/");
             if(httpreq.getHeader("Accept-Encoding") != null && httpreq.getHeader("Accept-Encoding").contains("gzip"))
               httpresponse.printHeader("Content-Encoding", "gzip");
             httpresponse.printBody(htmlGenerator.generateHtml("GET", currentGame, "main", gameRank));

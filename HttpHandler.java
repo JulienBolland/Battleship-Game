@@ -182,6 +182,27 @@ class HttpHandler{
     return parsedquery;
   }
 
+  /*getCookie returns the value of the cookie which name is "name"*/
+  public String getCookie(String name){
+    int i = 0;
+    String cookieheader = getHeader("Cookie");
+    if(cookieheader == null)
+      return null;
+    String[] cookies = cookieheader.split(";");
+
+    if(cookieheader == null)
+      return null;
+
+    System.out.println("COOKies.length: " + cookies.length);
+    for(i = 0; i < cookies.length; i++){
+      if(cookies[i].contains(name)){
+        System.out.println("The cookie is: " + cookies[i].substring(cookies[i].indexOf("=") + 1));
+        return cookies[i].substring(cookies[i].indexOf("=") + 1);
+      }
+    }
+    return null;
+  }
+
   /*printHeader, creates a new header or modifies it if it already exists*/
   public void printHeader(String header_Name, String content){
     int i;
