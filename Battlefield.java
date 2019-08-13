@@ -108,5 +108,18 @@ public class Battlefield {
         ships--;
     }
   }
+   //This method allows us to display the battlefield. (only used for debug)
+  public void display(){
+  int i, j;
+  for(i = 0; i < 10; i++){
+    for(j = 0; j < 10; j++){
+      if(battlefield[j][i].getType().equals("water"))
+        System.out.print(" o ");
+      else
+        System.out.print(" x ");
+    }
+      System.out.println("");
+  }
+}
 
 }

@@ -86,4 +86,9 @@ public class Game{
 		return nbAttempt;
 	}
 
+	// Allows us to display the game (for debug only)
+	public void justDisplay(){
+		secretBF.display();
+	}
+
 }
