@@ -281,6 +281,7 @@ public class Worker extends Thread{
     for(int i = 0; i < listOfGames.size(); i++){
       if(listOfGames.get(i).getCookie().getValue().equals(cookie.getValue())){
         currentGame = listOfGames.get(i);
+        currentGame.justDisplay();
         return currentGame;
       }
     }

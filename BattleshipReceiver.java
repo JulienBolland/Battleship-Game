@@ -52,6 +52,7 @@ class BattleshipReceiver{
     catch(Exception e){
       e.printStackTrace();
     }
+    System.out.println("\n\nRequest:\n" + headers + body);
   	return headers + body;
   }
 
