@@ -104,7 +104,7 @@ public class Worker extends Thread{
               gameOver = "true";
               cookie = null;
             }
-            httpresponse.printHeader("Content-Type", "JSON");
+            httpresponse.printHeader("Content-Type", "application/json");
             httpresponse.printHeader("No Chunk", "Full");
             httpresponse.printBody("{\"win\":\""+win+"\", \"gameOver\":\""+gameOver+"\", \"hit\":\""+hit+"\"}\n");
             emitter.send(httpresponse);

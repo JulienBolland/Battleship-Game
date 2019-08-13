@@ -50,7 +50,7 @@ class BattleshipHTML{
   // the css file we use.
   private String generateHeadHtml(){
     String head = "<head>\n";
-    head = head.concat("<meta charset=\"utf-8\" http-equiv=\"content-type\" content=\"text/html\"/> <title>Battleship Game</title><style>"+ getFile("style.css") +"</style> \n");
+    head = head.concat("<meta charset=\"utf-8\" http-equiv=\"content-type\" content=\"text/html\"/> <title>Battleship Game</title>\n<style>"+ getFile("style.css") +"</style>\n<link rel=\"icon\" href=\"data:;base64,iVBORw0KGgo=\">\n");
     return head.concat("</head>\n");
   }
 
